@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <meta name="theme-color" content="#0b0b0b">
+
+    <title>Unbothered</title>
+    <link rel="manifest" href="/manifest.json">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        ♪ Unbothered
+    </div>
+
+    <nav>
+
+        <button
+            class="nav active"
+            onclick="showSection('home')"
+        >
+            🏠 Home
+        </button>
+
+        <button
+            class="nav"
+            onclick="showSection('search')"
+        >
+            🔍 Search
+        </button>
+
+        <button
+            class="nav"
+            onclick="showSection('library')"
+        >
+            📚 Your Library
+        </button>
+
+    </nav>
+
+    <div class="section-title">
+        Your Music
+    </div>
+
+    <button class="playlist">
+        ❤️ Liked Songs
+    </button>
+
+    <button class="playlist">
+        🕘 Recently Played
+    </button>
+
+    <button class="playlist">
+        ⬇ Downloads
+    </button>
+
+    <button class="playlist">
+        ＋ Create Playlist
+    </button>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="arrows">
+
+            <button onclick="history.back()">
+                ‹
+            </button>
+
+            <button onclick="history.forward()">
+                ›
+            </button>
+
+        </div>
+
+
+        <input
+            id="searchInput"
+            type="search"
+            placeholder="Search songs or artists..."
+            oninput="searchSongs()"
+        >
+
+
+        <div class="profile">
+            U
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         HOME
+    ========================= -->
+
+    <section
+        id="home"
+        class="content"
+    >
+
+        <h1>
+            Welcome to Unbothered
+        </h1>
+
+        <p class="welcome-text">
+            Your music. Your space. No distractions.
+        </p>
+
+
+        <!-- MOODS -->
+
+        <h2>
+            Quick access
+        </h2>
+
+        <div class="quick-grid">
+
+            <button class="quick">
+                🌙 Chill
+            </button>
+
+            <button class="quick">
+                🎯 Focus
+            </button>
+
+            <button class="quick">
+                ⚡ Energy
+            </button>
+
+            <button class="quick">
+                😴 Sleep
+            </button>
+
+        </div>
+
+
+        <!-- SPECIAL CARDS -->
+
+        <h2>
+            Your shortcuts
+        </h2>
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="cover">
+                    ❤️
+                </div>
+
+                <strong>
+                    Liked Songs
+                </strong>
+
+                <p>
+                    Your favorite music
+                </p>
+
+                <button class="play">
+                    ▶
+                </button>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="cover">
+                    🕘
+                </div>
+
+                <strong>
+                    Recently Played
+                </strong>
+
+                <p>
+                    Continue listening
+                </p>
+
+                <button class="play">
+                    ▶
+                </button>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="cover">
+                    🎵
+                </div>
+
+                <strong>
+                    All Music
+                </strong>
+
+                <p>
+                    Your complete library
+                </p>
+
+                <button
+                    class="play"
+                    onclick="showSection('library')"
+                >
+                    ▶
+                </button>
+
+            </article>
+
+        </div>
+
+
+        <!-- SONGS -->
+
+        <h2>
+            Your Music
+        </h2>
+
+        <div
+            id="songList"
+            class="song-list"
+        >
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🎵
+                </div>
+
+                <h3>
+                    No songs yet
+                </h3>
+
+                <p>
+                    Add your music from the
+                    Unbothered admin panel.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         SEARCH
+    ========================= -->
+
+    <section
+        id="search"
+        class="content hidden"
+    >
+
+        <h1>
+            Search
+        </h1>
+
+        <div id="searchResults">
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    Search for music
+                </h3>
+
+                <p>
+                    Find songs, artists and albums.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         LIBRARY
+    ========================= -->
+
+    <section
+        id="library"
+        class="content hidden"
+    >
+
+        <h1>
+            Your Library
+        </h1>
+
+        <div class="library-grid">
+
+            <div class="library-card">
+                ❤️
+                <strong>
+                    Liked Songs
+                </strong>
+            </div>
+
+            <div class="library-card">
+                🕘
+                <strong>
+                    Recently Played
+                </strong>
+            </div>
+
+            <div class="library-card">
+                ⬇
+                <strong>
+                    Downloads
+                </strong>
+            </div>
+
+            <div class="library-card">
+                🎵
+                <strong>
+                    All Songs
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+     MUSIC PLAYER
+========================= -->
+
+<footer class="player">
+
+
+    <!-- CURRENT SONG -->
+
+    <div class="now-playing">
+
+        <div
+            id="miniCover"
+            class="mini-cover"
+        >
+            ♪
+        </div>
+
+
+        <div class="now-text">
+
+            <strong id="currentTitle">
+                Nothing playing
+            </strong>
+
+            <small id="currentArtist">
+                Choose a song
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+
+        <div class="control-buttons">
+
+            <button
+                onclick="shuffle()"
+                title="Shuffle"
+            >
+                🔀
+            </button>
+
+
+            <button
+                onclick="previousSong()"
+                title="Previous"
+            >
+                ⏮
+            </button>
+
+
+            <button
+                id="playButton"
+                class="big"
+                onclick="togglePlay()"
+                title="Play"
+            >
+                ▶
+            </button>
+
+
+            <button
+                onclick="nextSong()"
+                title="Next"
+            >
+                ⏭
+            </button>
+
+
+            <button
+                onclick="toggleRepeat()"
+                id="repeatButton"
+                title="Repeat"
+            >
+                🔁
+            </button>
+
+        </div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="progress-row">
+
+            <span id="currentTime">
+                0:00
+            </span>
+
+
+            <input
+                id="progress"
+                type="range"
+                min="0"
+                max="100"
+                value="0"
+                step="0.1"
+                oninput="seekSong()"
+            >
+
+
+            <span id="duration">
+                0:00
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- VOLUME -->
+
+    <div class="volume">
+
+        <span>
+            🔊
+        </span>
+
+        <input
+            id="volume"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="1"
+            oninput="changeVolume()"
+        >
+
+    </div>
+
+</footer>
+
+
+<!-- =========================
+     AUDIO ELEMENT
+========================= -->
+
+<audio
+    id="audioPlayer"
+    preload="metadata"
+></audio>
+
+
+<script>
+
+/* =========================================
+   GLOBAL VARIABLES
+========================================= */
+
+const audio =
+    document.getElementById("audioPlayer");
+
+const playButton =
+    document.getElementById("playButton");
+
+const progress =
+    document.getElementById("progress");
+
+const volume =
+    document.getElementById("volume");
+
+const currentTitle =
+    document.getElementById("currentTitle");
+
+const currentArtist =
+    document.getElementById("currentArtist");
+
+const miniCover =
+    document.getElementById("miniCover");
+
+let songs = [];
+
+let currentIndex = -1;
+
+let repeatEnabled = false;
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function showSection(section) {
+
+    document
+        .querySelectorAll(".content")
+        .forEach(element => {
+
+            element.classList.add("hidden");
+
+        });
+
+
+    const selected =
+        document.getElementById(section);
+
+
+    if (selected) {
+
+        selected.classList.remove("hidden");
+
+    }
+
+
+    document
+        .querySelectorAll(".nav")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+        });
+
+}
+
+
+/* =========================================
+   LOAD SONGS FROM SERVER
+========================================= */
+
+async function loadSongs() {
+
+    try {
+
+        const response =
+            await fetch("/api/songs");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load songs"
+            );
+
+        }
+
+
+        songs =
+            await response.json();
+
+
+        displaySongs(songs);
+
+    } catch (error) {
+
+        console.error(
+            "Song loading error:",
+            error
+        );
+
+
+        displaySongs([]);
+
+    }
+
+}
+
+
+/* =========================================
+   DISPLAY SONGS
+========================================= */
+
+function displaySongs(songArray) {
+
+    const list =
+        document.getElementById("songList");
+
+
+    if (!songArray ||
+        songArray.length === 0) {
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🎵
+                </div>
+
+                <h3>
+                    No songs yet
+                </h3>
+
+                <p>
+                    Add your music from the
+                    Unbothered admin panel.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    songArray.forEach(
+        (song, index) => {
+
+            const row =
+                document.createElement("div");
+
+
+            row.className =
+                "song-row";
+
+
+            row.innerHTML = `
+
+                <div class="song-number">
+                    ${index + 1}
+                </div>
+
+
+                <div class="song-art">
+
+                    ${
+                        song.cover
+
+                        ?
+
+                        `<img
+                            src="${song.cover}"
+                            alt=""
+                        >`
+
+                        :
+
+                        "♪"
+                    }
+
+                </div>
+
+
+                <div class="song-info">
+
+                    <strong>
+                        ${escapeHtml(song.title)}
+                    </strong>
+
+                    <small>
+                        ${escapeHtml(song.artist)}
+                    </small>
+
+                </div>
+
+
+                <div class="song-quality">
+
+                    ${
+                        escapeHtml(
+                            song.quality || ""
+                        )
+                    }
+
+                </div>
+
+
+                <button
+                    class="song-play"
+                    onclick="playSong(${index})"
+                    title="Play"
+                >
+                    ▶
+                </button>
+
+            `;
+
+
+            list.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   PLAY SONG
+========================================= */
+
+function playSong(index) {
+
+    if (!songs[index]) {
+
+        return;
+
+    }
+
+
+    const song =
+        songs[index];
+
+
+    currentIndex =
+        index;
+
+
+    if (!song.audio) {
+
+        console.warn(
+            "This song has no audio file."
+        );
+
+        return;
+
+    }
+
+
+    audio.src =
+        song.audio;
+
+
+    audio.load();
+
+
+    currentTitle.textContent =
+        song.title;
+
+
+    currentArtist.textContent =
+        song.artist;
+
+
+    /* COVER */
+
+    if (song.cover) {
+
+        miniCover.innerHTML = `
+
+            <img
+                src="${song.cover}"
+                alt=""
+            >
+
+        `;
+
+    } else {
+
+        miniCover.textContent =
+            "♪";
+
+    }
+
+
+    /* MEDIA SESSION */
+
+    setupMediaSession(song);
+
+
+    audio.play()
+        .then(() => {
+
+            playButton.textContent =
+                "⏸";
+
+        })
+        .catch(error => {
+
+            console.log(
+                "Playback waiting for user interaction:",
+                error
+            );
+
+            playButton.textContent =
+                "▶";
+
+        });
+
+}
+
+
+/* =========================================
+   PLAY / PAUSE
+========================================= */
+
+function togglePlay() {
+
+    if (!audio.src) {
+
+        return;
+
+    }
+
+
+    if (audio.paused) {
+
+        audio.play()
+            .then(() => {
+
+                playButton.textContent =
+                    "⏸";
+
+            })
+            .catch(error => {
+
+                console.error(
+                    error
+                );
+
+            });
+
+    } else {
+
+        audio.pause();
+
+        playButton.textContent =
+            "▶";
+
+    }
+
+}
+
+
+/* =========================================
+   NEXT SONG
+========================================= */
+
+function nextSong() {
+
+    if (songs.length === 0) {
+
+        return;
+
+    }
+
+
+    if (repeatEnabled &&
+        currentIndex >= 0) {
+
+        playSong(currentIndex);
+
+        return;
+
+    }
+
+
+    currentIndex++;
+
+
+    if (
+        currentIndex >=
+        songs.length
+    ) {
+
+        currentIndex = 0;
+
+    }
+
+
+    playSong(currentIndex);
+
+}
+
+
+/* =========================================
+   PREVIOUS SONG
+========================================= */
+
+function previousSong() {
+
+    if (songs.length === 0) {
+
+        return;
+
+    }
+
+
+    /*
+       If song already played for more than
+       3 seconds, restart it.
+    */
+
+    if (audio.currentTime > 3) {
+
+        audio.currentTime = 0;
+
+        return;
+
+    }
+
+
+    currentIndex--;
+
+
+    if (currentIndex < 0) {
+
+        currentIndex =
+            songs.length - 1;
+
+    }
+
+
+    playSong(currentIndex);
+
+}
+
+
+/* =========================================
+   AUTO NEXT
+========================================= */
+
+audio.addEventListener(
+    "ended",
+    () => {
+
+        if (repeatEnabled) {
+
+            audio.currentTime = 0;
+
+            audio.play();
+
+        } else {
+
+            nextSong();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   PLAY / PAUSE EVENTS
+========================================= */
+
+audio.addEventListener(
+    "play",
+    () => {
+
+        playButton.textContent =
+            "⏸";
+
+
+        updateMediaSessionState(
+            "playing"
+        );
+
+    }
+);
+
+
+audio.addEventListener(
+    "pause",
+    () => {
+
+        playButton.textContent =
+            "▶";
+
+
+        updateMediaSessionState(
+            "paused"
+        );
+
+    }
+);
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+audio.addEventListener(
+    "timeupdate",
+    () => {
+
+        if (!audio.duration ||
+            isNaN(audio.duration)) {
+
+            return;
+
+        }
+
+
+        const percentage =
+            (
+                audio.currentTime /
+                audio.duration
+            ) * 100;
+
+
+        progress.value =
+            percentage;
+
+
+        document.getElementById(
+            "currentTime"
+        ).textContent =
+            formatTime(
+                audio.currentTime
+            );
+
+
+        updateMediaSessionPosition();
+
+    }
+);
+
+
+/* =========================================
+   METADATA LOADED
+========================================= */
+
+audio.addEventListener(
+    "loadedmetadata",
+    () => {
+
+        document.getElementById(
+            "duration"
+        ).textContent =
+            formatTime(
+                audio.duration
+            );
+
+
+        progress.value =
+            0;
+
+    }
+);
+
+
+/* =========================================
+   SEEK
+========================================= */
+
+function seekSong() {
+
+    if (!audio.duration ||
+        isNaN(audio.duration)) {
+
+        return;
+
+    }
+
+
+    audio.currentTime =
+        (
+            Number(progress.value) /
+            100
+        ) * audio.duration;
+
+}
+
+
+/* =========================================
+   FORMAT TIME
+========================================= */
+
+function formatTime(seconds) {
+
+    if (!seconds ||
+        isNaN(seconds)) {
+
+        return "0:00";
+
+    }
+
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+
+    const remaining =
+        Math.floor(
+            seconds % 60
+        );
+
+
+    return (
+        minutes +
+        ":" +
+        String(remaining)
+            .padStart(2, "0")
+    );
+
+}
+
+
+/* =========================================
+   VOLUME
+========================================= */
+
+function changeVolume() {
+
+    audio.volume =
+        Number(volume.value);
+
+}
+
+
+/* =========================================
+   SHUFFLE
+========================================= */
+
+function shuffle() {
+
+    if (songs.length === 0) {
+
+        return;
+
+    }
+
+
+    const randomIndex =
+        Math.floor(
+            Math.random() *
+            songs.length
+        );
+
+
+    playSong(randomIndex);
+
+}
+
+
+/* =========================================
+   REPEAT
+========================================= */
+
+function toggleRepeat() {
+
+    repeatEnabled =
+        !repeatEnabled;
+
+
+    const button =
+        document.getElementById(
+            "repeatButton"
+        );
+
+
+    if (repeatEnabled) {
+
+        button.style.color =
+            "white";
+
+    } else {
+
+        button.style.color =
+            "#aaa";
+
+    }
+
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+function searchSongs() {
+
+    const query =
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    if (!query) {
+
+        document
+            .getElementById(
+                "searchResults"
+            )
+            .innerHTML = `
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Search for music
+                    </h3>
+
+                    <p>
+                        Find songs, artists and albums.
+                    </p>
+
+                </div>
+
+            `;
+
+        return;
+
+    }
+
+
+    showSection("search");
+
+
+    const results =
+        songs.filter(song => {
+
+            const title =
+                (
+                    song.title || ""
+                ).toLowerCase();
+
+
+            const artist =
+                (
+                    song.artist || ""
+                ).toLowerCase();
+
+
+            const album =
+                (
+                    song.album || ""
+                ).toLowerCase();
+
+
+            return (
+                title.includes(query) ||
+                artist.includes(query) ||
+                album.includes(query)
+            );
+
+        });
+
+
+    displaySearchResults(
+        results
+    );
+
+}
+
+
+/* =========================================
+   SEARCH RESULTS
+========================================= */
+
+function displaySearchResults(
+    results
+) {
+
+    const container =
+        document.getElementById(
+            "searchResults"
+        );
+
+
+    if (!results.length) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    No results found
+                </h3>
+
+                <p>
+                    Try another song or artist.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    results.forEach(
+        song => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "search-result";
+
+
+            item.innerHTML = `
+
+                <strong>
+                    ${escapeHtml(
+                        song.title
+                    )}
+                </strong>
+
+                <small>
+                    ${escapeHtml(
+                        song.artist
+                    )}
+                </small>
+
+            `;
+
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    const index =
+                        songs.indexOf(song);
+
+
+                    if (index !== -1) {
+
+                        playSong(index);
+
+                    }
+
+                }
+            );
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   MEDIA SESSION
+   LOCK SCREEN CONTROLS
+========================================= */
+
+function setupMediaSession(song) {
+
+    if (
+        !("mediaSession" in navigator)
+    ) {
+
+        return;
+
+    }
+
+
+    let artwork = [];
+
+
+    if (song.cover) {
+
+        artwork = [
+
+            {
+                src: song.cover,
+                sizes: "512x512",
+                type: "image/jpeg"
+            }
+
+        ];
+
+    }
+
+
+    navigator.mediaSession.metadata =
+        new MediaMetadata({
+
+            title:
+                song.title || "Unknown Song",
+
+            artist:
+                song.artist || "Unknown Artist",
+
+            album:
+                song.album || "Unbothered",
+
+            artwork:
+                artwork
+
+        });
+
+
+    /* PLAY */
+
+    try {
+
+        navigator.mediaSession.setActionHandler(
+            "play",
+            () => {
+
+                audio.play();
+
+            }
+        );
+
+    } catch (error) {}
+
+
+    /* PAUSE */
+
+    try {
+
+        navigator.mediaSession.setActionHandler(
+            "pause",
+            () => {
+
+                audio.pause();
+
+            }
+        );
+
+    } catch (error) {}
+
+
+    /* NEXT */
+
+    try {
+
+        navigator.mediaSession.setActionHandler(
+            "nexttrack",
+            () => {
+
+                nextSong();
+
+            }
+        );
+
+    } catch (error) {}
+
+
+    /* PREVIOUS */
+
+    try {
+
+        navigator.mediaSession.setActionHandler(
+            "previoustrack",
+            () => {
+
+                previousSong();
+
+            }
+        );
+
+    } catch (error) {}
+
+
+    /* SEEK BACKWARD */
+
+    try {
+
+        navigator.mediaSession.setActionHandler(
+            "seekbackward",
+            () => {
+
+                audio.currentTime =
+                    Math.max(
+                        0,
+                        audio.currentTime - 10
+                    );
+
+            }
+        );
+
+    } catch (error) {}
+
+
+    /* SEEK FORWARD */
+
+    try {
+
+        navigator.mediaSession.setActionHandler(
+            "seekforward",
+            () => {
+
+                audio.currentTime =
+                    Math.min(
+                        audio.duration || 0,
+                        audio.currentTime + 10
+                    );
+
+            }
+        );
+
+    } catch (error) {}
+
+}
+
+
+/* =========================================
+   MEDIA SESSION STATE
+========================================= */
+
+function updateMediaSessionState(
+    state
+) {
+
+    if (
+        "mediaSession" in navigator
+    ) {
+
+        navigator.mediaSession.playbackState =
+            state;
+
+    }
+
+}
+
+
+/* =========================================
+   MEDIA SESSION POSITION
+========================================= */
+
+function updateMediaSessionPosition() {
+
+    if (
+        !("mediaSession" in navigator)
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !audio.duration ||
+        !isFinite(audio.duration)
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        navigator.mediaSession.setPositionState({
+
+            duration:
+                audio.duration,
+
+            playbackRate:
+                audio.playbackRate || 1,
+
+            position:
+                Math.min(
+                    audio.currentTime,
+                    audio.duration
+                )
+
+        });
+
+    } catch (error) {}
+
+}
+
+
+/* =========================================
+   HTML ESCAPING
+========================================= */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text || "";
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   START APP
+========================================= */
+
+audio.volume =
+    Number(volume.value);
+
+
+loadSongs();
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker
+            .register("/sw.js")
+            .then(() => {
+                console.log(
+                    "Unbothered app installed successfully."
+                );
+            })
+            .catch(error => {
+                console.error(
+                    "Service Worker error:",
+                    error
+                );
+            });
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

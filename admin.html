@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unbothered - Add Song</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #090909;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: #151515;
+            padding: 30px;
+            border-radius: 14px;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 7px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border-radius: 7px;
+            border: 1px solid #333;
+            background: #0d0d0d;
+            color: white;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 28px;
+            padding: 14px;
+            border: 0;
+            border-radius: 25px;
+            background: white;
+            color: black;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ddd;
+        }
+
+        #message {
+            margin-top: 20px;
+            text-align: center;
+            color: #aaa;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #aaa;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a class="back" href="index.html">← Back to Unbothered</a>
+
+    <h1>Add a Song</h1>
+
+    <div class="subtitle">
+        Add music to your Unbothered library.
+    </div>
+
+    <form id="songForm">
+
+        <label>Song Title</label>
+        <input
+            type="text"
+            id="title"
+            placeholder="Enter song title"
+            required
+        >
+
+        <label>Artist</label>
+        <input
+            type="text"
+            id="artist"
+            placeholder="Enter artist name"
+            required
+        >
+
+        <label>Album</label>
+        <input
+            type="text"
+            id="album"
+            placeholder="Enter album name"
+        >
+
+        <label>Release Date</label>
+        <input
+            type="date"
+            id="release_date"
+        >
+
+        <label>Audio File</label>
+        <input
+            type="file"
+            id="audio"
+            accept="audio/*"
+            required
+        >
+
+        <label>Cover Image</label>
+        <input
+            type="file"
+            id="cover"
+            accept="image/*"
+        >
+
+        <label>Quality</label>
+        <select id="quality">
+            <option value="Original">Original</option>
+            <option value="FLAC">FLAC</option>
+            <option value="WAV">WAV</option>
+            <option value="MP3">MP3</option>
+            <option value="AAC">AAC</option>
+        </select>
+
+        <button type="submit">
+            ADD SONG
+        </button>
+
+    </form>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+
+const form = document.getElementById("songForm");
+const message = document.getElementById("message");
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    message.textContent = "Uploading...";
+
+    const formData = new FormData();
+
+    formData.append(
+        "title",
+        document.getElementById("title").value
+    );
+
+    formData.append(
+        "artist",
+        document.getElementById("artist").value
+    );
+
+    formData.append(
+        "album",
+        document.getElementById("album").value
+    );
+
+    formData.append(
+        "release_date",
+        document.getElementById("release_date").value
+    );
+
+    formData.append(
+        "quality",
+        document.getElementById("quality").value
+    );
+
+    formData.append(
+        "audio",
+        document.getElementById("audio").files[0]
+    );
+
+    const coverFile = document.getElementById("cover").files[0];
+
+    if (coverFile) {
+        formData.append("cover", coverFile);
+    }
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:3000/api/songs",
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const result = await response.json();
+
+        if (response.ok) {
+            message.textContent = "Song added successfully!";
+
+            form.reset();
+        } else {
+            message.textContent =
+                result.error || "Upload failed.";
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "Could not connect to Unbothered server.";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

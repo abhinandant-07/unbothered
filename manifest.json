@@ -1,0 +1,11 @@
+{
+  "name": "Unbothered",
+  "short_name": "Unbothered",
+  "description": "Your music. Your space. No distractions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090909",
+  "theme_color": "#090909",
+  "orientation": "portrait-primary",
+  "icons": []
+}
