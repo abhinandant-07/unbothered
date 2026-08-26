@@ -8,37 +8,47 @@ const db = require("./database");
 
 const app = express();
 
-// Render gives PORT automatically
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// ==========================================
+// MIDDLEWARE
+// ==========================================
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend files
+// Serve frontend
 app.use(express.static(__dirname));
 
-// Uploads folder
+
+// ==========================================
+// LOCAL UPLOADS
+// ==========================================
+
 const uploadsPath = path.join(__dirname, "uploads");
 
 if (!fs.existsSync(uploadsPath)) {
     fs.mkdirSync(uploadsPath);
 }
 
-// Multer storage
 const storage = multer.diskStorage({
+
     destination: function (req, file, cb) {
         cb(null, uploadsPath);
     },
 
     filename: function (req, file, cb) {
-        const extension = path.extname(file.originalname);
+
+        const extension =
+            path.extname(file.originalname);
 
         const filename =
             Date.now() +
             "-" +
-            Math.random().toString(36).substring(2, 8) +
+            Math.random()
+                .toString(36)
+                .substring(2, 8) +
             extension;
 
         cb(null, filename);
@@ -49,98 +59,201 @@ const upload = multer({
     storage: storage
 });
 
-// Make uploaded files accessible
-app.use("/uploads", express.static(uploadsPath));
+app.use(
+    "/uploads",
+    express.static(uploadsPath)
+);
 
 
-// ======================================================
+// ==========================================
 // HEALTH CHECK
-// ======================================================
+// ==========================================
 
 app.get("/api/health", (req, res) => {
+
     res.json({
         status: "ok",
         app: "Unbothered",
         message: "Unbothered server is running!"
     });
+
 });
 
 
-// ======================================================
-// GET ALL SONGS FROM SUPABASE
-// ======================================================
+// ==========================================
+// GET SONGS FROM SUPABASE
+// ==========================================
 
 app.get("/api/songs", async (req, res) => {
 
     try {
 
-        const supabaseUrl = process.env.SUPABASE_URL;
-        const supabaseKey = process.env.SUPABASE_ANON_KEY;
+        const supabaseUrl =
+            process.env.SUPABASE_URL;
 
+        const supabaseKey =
+            process.env.SUPABASE_ANON_KEY;
+
+
+        // Check environment variables
         if (!supabaseUrl || !supabaseKey) {
 
-            console.error("Supabase environment variables are missing");
+            console.error(
+                "Supabase environment variables are missing"
+            );
 
             return res.status(500).json({
-                error: "Supabase environment variables are missing"
+
+                error:
+                    "Supabase environment variables are missing"
+
             });
         }
 
+
+        // Request songs from Supabase
         const response = await fetch(
+
             `${supabaseUrl}/rest/v1/songs?select=*`,
+
             {
                 method: "GET",
 
                 headers: {
-                    "apikey": supabaseKey,
-                    "Authorization": `Bearer ${supabaseKey}`,
-                    "Content-Type": "application/json"
+
+                    "apikey":
+                        supabaseKey,
+
+                    "Authorization":
+                        `Bearer ${supabaseKey}`,
+
+                    "Content-Type":
+                        "application/json"
                 }
             }
+
         );
 
-        const data = await response.json();
 
-        console.log("Supabase songs response:", data);
+        // Read Supabase response
+        const data =
+            await response.json();
 
+
+        // Supabase error
         if (!response.ok) {
 
-            return res.status(response.status).json({
-                error: "Supabase error",
-                details: data
+            console.error(
+                "Supabase error:",
+                data
+            );
+
+            return res.status(
+                response.status
+            ).json({
+
+                error:
+                    "Supabase error",
+
+                details:
+                    data
+
             });
         }
 
-        res.json(data);
 
-    } catch (error) {
+        // ==========================================
+        // IMPORTANT:
+        // Convert Supabase column names
+        // to the names expected by index.html
+        //
+        // audio_url -> audio
+        // cover_url -> cover
+        // ==========================================
 
-        console.error("Songs API error:", error);
+        const songs =
+            data.map(song => ({
+
+                id:
+                    song.id,
+
+                title:
+                    song.title,
+
+                artist:
+                    song.artist,
+
+                album:
+                    song.album || null,
+
+                cover:
+                    song.cover_url || null,
+
+                audio:
+                    song.audio_url,
+
+                quality:
+                    song.quality || "Original",
+
+                release_date:
+                    song.release_date || null
+
+            }));
+
+
+        console.log(
+            "Songs fetched:",
+            songs.length
+        );
+
+
+        // Send songs to frontend
+        res.json(songs);
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Songs API error:",
+            error
+        );
 
         res.status(500).json({
-            error: "Failed to fetch songs",
-            details: error.message
+
+            error:
+                "Failed to fetch songs",
+
+            details:
+                error.message
+
         });
+
     }
+
 });
 
 
-// ======================================================
+// ==========================================
 // ADD SONG
-// ======================================================
+// ==========================================
 
 app.post(
+
     "/api/songs",
 
     upload.fields([
+
         {
             name: "audio",
             maxCount: 1
         },
+
         {
             name: "cover",
             maxCount: 1
         }
+
     ]),
 
     (req, res) => {
@@ -156,25 +269,37 @@ app.post(
             } = req.body;
 
 
-            // Check title and artist
+            // Check title
             if (!title || !artist) {
 
                 return res.status(400).json({
-                    error: "Song title and artist are required."
+
+                    error:
+                        "Song title and artist are required."
+
                 });
+
             }
 
 
             // Check audio
-            if (!req.files || !req.files.audio) {
+            if (
+                !req.files ||
+                !req.files.audio
+            ) {
 
                 return res.status(400).json({
-                    error: "Audio file is required."
+
+                    error:
+                        "Audio file is required."
+
                 });
+
             }
 
 
-            const audioFile = req.files.audio[0];
+            const audioFile =
+                req.files.audio[0];
 
 
             // Cover is optional
@@ -184,79 +309,127 @@ app.post(
                     : null;
 
 
-            // Audio URL
+            // Audio path
             const audioPath =
-                "/uploads/" + audioFile.filename;
+                "/uploads/" +
+                audioFile.filename;
 
 
-            // Cover URL
+            // Cover path
             const coverPath =
                 coverFile
-                    ? "/uploads/" + coverFile.filename
+                    ? "/uploads/" +
+                      coverFile.filename
                     : null;
 
 
-            // Save song in local database
-            const result = db.prepare(`
-                INSERT INTO songs
-                (
+            // Save to local database
+            const result =
+                db.prepare(`
+
+                    INSERT INTO songs
+
+                    (
+                        title,
+                        artist,
+                        album,
+                        cover,
+                        audio,
+                        quality,
+                        release_date
+                    )
+
+                    VALUES
+                    (?, ?, ?, ?, ?, ?, ?)
+
+                `).run(
+
                     title,
+
                     artist,
-                    album,
-                    cover,
-                    audio,
-                    quality,
-                    release_date
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            `).run(
-                title,
-                artist,
-                album || null,
-                coverPath,
-                audioPath,
-                quality || "Original",
-                release_date || null
+
+                    album || null,
+
+                    coverPath,
+
+                    audioPath,
+
+                    quality ||
+                        "Original",
+
+                    release_date ||
+                        null
+
+                );
+
+
+            console.log(
+                "Song added:",
+                title
             );
-
-
-            console.log("Song added:", title);
 
 
             res.json({
 
-                success: true,
+                success:
+                    true,
 
-                message: "Song added successfully!",
+                message:
+                    "Song added successfully!",
 
-                songId: result.lastInsertRowid,
+                songId:
+                    result.lastInsertRowid,
 
-                audio: audioPath,
+                audio:
+                    audioPath,
 
-                cover: coverPath
+                cover:
+                    coverPath
+
             });
 
-        } catch (error) {
+        }
 
-            console.error("Add song error:", error);
+        catch (error) {
+
+            console.error(
+                "Add song error:",
+                error
+            );
 
             res.status(500).json({
-                error: "Failed to add song.",
-                details: error.message
+
+                error:
+                    "Failed to add song.",
+
+                details:
+                    error.message
+
             });
+
         }
+
     }
+
 );
 
 
-// ======================================================
+// ==========================================
 // START SERVER
-// ======================================================
+// ==========================================
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(
 
-    console.log(
-        `Unbothered server running on port ${PORT}`
-    );
+    PORT,
 
-});
+    "0.0.0.0",
+
+    () => {
+
+        console.log(
+            `Unbothered server running on port ${PORT}`
+        );
+
+    }
+
+);
