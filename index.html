@@ -23,7 +23,7 @@
 <aside class="sidebar">
 
     <div class="brand">
-        ♪ Unbothered
+        â™ª Unbothered
     </div>
 
     <nav>
@@ -32,21 +32,21 @@
             class="nav active"
             onclick="showSection('home')"
         >
-            🏠 Home
+            ðŸ  Home
         </button>
 
         <button
             class="nav"
             onclick="showSection('search')"
         >
-            🔍 Search
+            ðŸ” Search
         </button>
 
         <button
             class="nav"
             onclick="showSection('library')"
         >
-            📚 Your Library
+            ðŸ“š Your Library
         </button>
 
     </nav>
@@ -56,19 +56,19 @@
     </div>
 
     <button class="playlist">
-        ❤️ Liked Songs
+        â¤ï¸ Liked Songs
     </button>
 
     <button class="playlist">
-        🕘 Recently Played
+        ðŸ•˜ Recently Played
     </button>
 
     <button class="playlist">
-        ⬇ Downloads
+        â¬‡ Downloads
     </button>
 
     <button class="playlist">
-        ＋ Create Playlist
+        ï¼‹ Create Playlist
     </button>
 
 </aside>
@@ -87,11 +87,11 @@
         <div class="arrows">
 
             <button onclick="history.back()">
-                ‹
+                â€¹
             </button>
 
             <button onclick="history.forward()">
-                ›
+                â€º
             </button>
 
         </div>
@@ -139,19 +139,19 @@
         <div class="quick-grid">
 
             <button class="quick">
-                🌙 Chill
+                ðŸŒ™ Chill
             </button>
 
             <button class="quick">
-                🎯 Focus
+                ðŸŽ¯ Focus
             </button>
 
             <button class="quick">
-                ⚡ Energy
+                âš¡ Energy
             </button>
 
             <button class="quick">
-                😴 Sleep
+                ðŸ˜´ Sleep
             </button>
 
         </div>
@@ -168,7 +168,7 @@
             <article class="card">
 
                 <div class="cover">
-                    ❤️
+                    â¤ï¸
                 </div>
 
                 <strong>
@@ -180,7 +180,7 @@
                 </p>
 
                 <button class="play">
-                    ▶
+                    â–¶
                 </button>
 
             </article>
@@ -189,7 +189,7 @@
             <article class="card">
 
                 <div class="cover">
-                    🕘
+                    ðŸ•˜
                 </div>
 
                 <strong>
@@ -201,7 +201,7 @@
                 </p>
 
                 <button class="play">
-                    ▶
+                    â–¶
                 </button>
 
             </article>
@@ -210,7 +210,7 @@
             <article class="card">
 
                 <div class="cover">
-                    🎵
+                    ðŸŽµ
                 </div>
 
                 <strong>
@@ -225,7 +225,7 @@
                     class="play"
                     onclick="showSection('library')"
                 >
-                    ▶
+                    â–¶
                 </button>
 
             </article>
@@ -247,7 +247,7 @@
             <div class="empty">
 
                 <div class="empty-icon">
-                    🎵
+                    ðŸŽµ
                 </div>
 
                 <h3>
@@ -284,7 +284,7 @@
             <div class="empty">
 
                 <div class="empty-icon">
-                    🔍
+                    ðŸ”
                 </div>
 
                 <h3>
@@ -318,28 +318,28 @@
         <div class="library-grid">
 
             <div class="library-card">
-                ❤️
+                â¤ï¸
                 <strong>
                     Liked Songs
                 </strong>
             </div>
 
             <div class="library-card">
-                🕘
+                ðŸ•˜
                 <strong>
                     Recently Played
                 </strong>
             </div>
 
             <div class="library-card">
-                ⬇
+                â¬‡
                 <strong>
                     Downloads
                 </strong>
             </div>
 
             <div class="library-card">
-                🎵
+                ðŸŽµ
                 <strong>
                     All Songs
                 </strong>
@@ -367,7 +367,7 @@
             id="miniCover"
             class="mini-cover"
         >
-            ♪
+            â™ª
         </div>
 
 
@@ -397,7 +397,7 @@
                 onclick="shuffle()"
                 title="Shuffle"
             >
-                🔀
+                ðŸ”€
             </button>
 
 
@@ -405,7 +405,7 @@
                 onclick="previousSong()"
                 title="Previous"
             >
-                ⏮
+                â®
             </button>
 
 
@@ -415,7 +415,7 @@
                 onclick="togglePlay()"
                 title="Play"
             >
-                ▶
+                â–¶
             </button>
 
 
@@ -423,7 +423,7 @@
                 onclick="nextSong()"
                 title="Next"
             >
-                ⏭
+                â­
             </button>
 
 
@@ -432,7 +432,7 @@
                 id="repeatButton"
                 title="Repeat"
             >
-                🔁
+                ðŸ”
             </button>
 
         </div>
@@ -472,7 +472,7 @@
     <div class="volume">
 
         <span>
-            🔊
+            ðŸ”Š
         </span>
 
         <input
@@ -631,7 +631,7 @@ function displaySongs(songArray) {
             <div class="empty">
 
                 <div class="empty-icon">
-                    🎵
+                    ðŸŽµ
                 </div>
 
                 <h3>
@@ -676,18 +676,18 @@ function displaySongs(songArray) {
                 <div class="song-art">
 
                     ${
-                        song.cover
+                        song.cover_url
 
                         ?
 
                         `<img
-                            src="${song.cover}"
+                            src="${song.cover_url}"
                             alt=""
                         >`
 
                         :
 
-                        "♪"
+                        "â™ª"
                     }
 
                 </div>
@@ -722,7 +722,7 @@ function displaySongs(songArray) {
                     onclick="playSong(${index})"
                     title="Play"
                 >
-                    ▶
+                    â–¶
                 </button>
 
             `;
@@ -757,7 +757,7 @@ function playSong(index) {
         index;
 
 
-    if (!song.audio) {
+    if (!song.audio_url) {
 
         console.warn(
             "This song has no audio file."
@@ -769,7 +769,7 @@ function playSong(index) {
 
 
     audio.src =
-        song.audio;
+        song.audio_url;
 
 
     audio.load();
@@ -785,12 +785,12 @@ function playSong(index) {
 
     /* COVER */
 
-    if (song.cover) {
+    if (song.cover_url) {
 
         miniCover.innerHTML = `
 
             <img
-                src="${song.cover}"
+                src="${song.cover_url}"
                 alt=""
             >
 
@@ -799,7 +799,7 @@ function playSong(index) {
     } else {
 
         miniCover.textContent =
-            "♪";
+            "â™ª";
 
     }
 
@@ -813,7 +813,7 @@ function playSong(index) {
         .then(() => {
 
             playButton.textContent =
-                "⏸";
+                "â¸";
 
         })
         .catch(error => {
@@ -824,7 +824,7 @@ function playSong(index) {
             );
 
             playButton.textContent =
-                "▶";
+                "â–¶";
 
         });
 
@@ -850,7 +850,7 @@ function togglePlay() {
             .then(() => {
 
                 playButton.textContent =
-                    "⏸";
+                    "â¸";
 
             })
             .catch(error => {
@@ -866,7 +866,7 @@ function togglePlay() {
         audio.pause();
 
         playButton.textContent =
-            "▶";
+            "â–¶";
 
     }
 
@@ -990,7 +990,7 @@ audio.addEventListener(
     () => {
 
         playButton.textContent =
-            "⏸";
+            "â¸";
 
 
         updateMediaSessionState(
@@ -1006,7 +1006,7 @@ audio.addEventListener(
     () => {
 
         playButton.textContent =
-            "▶";
+            "â–¶";
 
 
         updateMediaSessionState(
@@ -1235,7 +1235,7 @@ function searchSongs() {
                 <div class="empty">
 
                     <div class="empty-icon">
-                        🔍
+                        ðŸ”
                     </div>
 
                     <h3>
@@ -1316,7 +1316,7 @@ function displaySearchResults(
             <div class="empty">
 
                 <div class="empty-icon">
-                    🔍
+                    ðŸ”
                 </div>
 
                 <h3>
@@ -1416,12 +1416,12 @@ function setupMediaSession(song) {
     let artwork = [];
 
 
-    if (song.cover) {
+    if (song.cover_url) {
 
         artwork = [
 
             {
-                src: song.cover,
+                src: song.cover_url,
                 sizes: "512x512",
                 type: "image/jpeg"
             }
