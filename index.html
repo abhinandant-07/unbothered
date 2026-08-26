@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unbothered</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">♪ Unbothered</div>
+    <nav>
+      <button class="nav active">⌂ Home</button>
+      <button class="nav">⌕ Search</button>
+      <button class="nav">▣ Your Library</button>
+    </nav>
+    <div class="section-title">Your Playlists</div>
+    <button class="playlist">♥ Liked Songs</button>
+    <button class="playlist">◷ Recently Played</button>
+    <button class="playlist">＋ Create Playlist</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="arrows"><button>‹</button><button>›</button></div>
+      <input type="search" placeholder="What do you want to play?">
+      <div class="profile">U</div>
+    </header>
+
+    <section class="content">
+      <h1>Good afternoon</h1>
+
+      <div class="quick-grid">
+        <button class="quick">♥ &nbsp; Liked Songs</button>
+        <button class="quick">◷ &nbsp; Recently Played</button>
+        <button class="quick">＋ &nbsp; Create Playlist</button>
+      </div>
+
+      <h2>Made for you</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="cover">♪</div>
+          <strong>Your Music</strong>
+          <p>Your music collection will appear here.</p>
+          <button class="play">▶</button>
+        </article>
+        <article class="card">
+          <div class="cover two">♫</div>
+          <strong>New Releases</strong>
+          <p>Recently added music.</p>
+          <button class="play">▶</button>
+        </article>
+        <article class="card">
+          <div class="cover three">★</div>
+          <strong>Favorites</strong>
+          <p>Your favorite songs.</p>
+          <button class="play">▶</button>
+        </article>
+      </div>
+
+      <h2>Your library</h2>
+      <div class="empty">
+        <div class="empty-icon">♫</div>
+        <h3>Your Unbothered library is ready</h3>
+        <p>Next we'll connect your database and music storage.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="player">
+    <div class="now-playing">
+      <div class="mini-cover">♪</div>
+      <div><strong>Nothing playing</strong><small>Choose a song to start</small></div>
+    </div>
+    <div class="controls">
+      <div>
+        <button>🔀</button><button>⏮</button><button class="big">▶</button><button>⏭</button><button>🔁</button>
+      </div>
+      <div class="progress"><span></span></div>
+    </div>
+    <div class="volume">🔊 ━━━━━</div>
+  </footer>
+</body>
+</html>
