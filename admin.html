@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Unbothered - Add Song</title>
+
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -74,6 +83,11 @@
             background: #ddd;
         }
 
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         #message {
             margin-top: 20px;
             text-align: center;
@@ -86,24 +100,41 @@
             color: #aaa;
             text-decoration: none;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
 <div class="container">
 
-    <a class="back" href="index.html">← Back to Unbothered</a>
+    <a
+        class="back"
+        href="index.html"
+    >
+        ← Back to Unbothered
+    </a>
 
-    <h1>Add a Song</h1>
+
+    <h1>
+        Add a Song
+    </h1>
+
 
     <div class="subtitle">
         Add music to your Unbothered library.
     </div>
 
+
     <form id="songForm">
 
-        <label>Song Title</label>
+
+        <label>
+            Song Title
+        </label>
+
         <input
             type="text"
             id="title"
@@ -111,7 +142,11 @@
             required
         >
 
-        <label>Artist</label>
+
+        <label>
+            Artist
+        </label>
+
         <input
             type="text"
             id="artist"
@@ -119,20 +154,32 @@
             required
         >
 
-        <label>Album</label>
+
+        <label>
+            Album
+        </label>
+
         <input
             type="text"
             id="album"
             placeholder="Enter album name"
         >
 
-        <label>Release Date</label>
+
+        <label>
+            Release Date
+        </label>
+
         <input
             type="date"
             id="release_date"
         >
 
-        <label>Audio File</label>
+
+        <label>
+            Audio File
+        </label>
+
         <input
             type="file"
             id="audio"
@@ -140,114 +187,239 @@
             required
         >
 
-        <label>Cover Image</label>
+
+        <label>
+            Cover Image
+        </label>
+
         <input
             type="file"
             id="cover"
             accept="image/*"
         >
 
-        <label>Quality</label>
+
+        <label>
+            Quality
+        </label>
+
         <select id="quality">
-            <option value="Original">Original</option>
-            <option value="FLAC">FLAC</option>
-            <option value="WAV">WAV</option>
-            <option value="MP3">MP3</option>
-            <option value="AAC">AAC</option>
+
+            <option value="Original">
+                Original
+            </option>
+
+            <option value="FLAC">
+                FLAC
+            </option>
+
+            <option value="WAV">
+                WAV
+            </option>
+
+            <option value="MP3">
+                MP3
+            </option>
+
+            <option value="AAC">
+                AAC
+            </option>
+
         </select>
 
-        <button type="submit">
+
+        <button
+            type="submit"
+            id="submitButton"
+        >
             ADD SONG
         </button>
 
     </form>
 
+
     <div id="message"></div>
 
 </div>
 
+
 <script>
 
-const form = document.getElementById("songForm");
-const message = document.getElementById("message");
+const form =
+    document.getElementById("songForm");
 
-form.addEventListener("submit", async function(event) {
+const message =
+    document.getElementById("message");
 
-    event.preventDefault();
+const submitButton =
+    document.getElementById("submitButton");
 
-    message.textContent = "Uploading...";
 
-    const formData = new FormData();
+form.addEventListener(
+    "submit",
+    async function(event) {
 
-    formData.append(
-        "title",
-        document.getElementById("title").value
-    );
+        event.preventDefault();
 
-    formData.append(
-        "artist",
-        document.getElementById("artist").value
-    );
 
-    formData.append(
-        "album",
-        document.getElementById("album").value
-    );
+        const audioFile =
+            document.getElementById(
+                "audio"
+            ).files[0];
 
-    formData.append(
-        "release_date",
-        document.getElementById("release_date").value
-    );
 
-    formData.append(
-        "quality",
-        document.getElementById("quality").value
-    );
+        const coverFile =
+            document.getElementById(
+                "cover"
+            ).files[0];
 
-    formData.append(
-        "audio",
-        document.getElementById("audio").files[0]
-    );
 
-    const coverFile = document.getElementById("cover").files[0];
+        if (!audioFile) {
 
-    if (coverFile) {
-        formData.append("cover", coverFile);
-    }
-
-    try {
-
-        const response = await fetch(
-            "http://localhost:3000/api/songs",
-            {
-                method: "POST",
-                body: formData
-            }
-        );
-
-        const result = await response.json();
-
-        if (response.ok) {
-            message.textContent = "Song added successfully!";
-
-            form.reset();
-        } else {
             message.textContent =
-                result.error || "Upload failed.";
+                "Please select an audio file.";
+
+            return;
         }
 
-    } catch (error) {
 
-        console.error(error);
+        submitButton.disabled =
+            true;
+
+        submitButton.textContent =
+            "UPLOADING...";
 
         message.textContent =
-            "Could not connect to Unbothered server.";
+            "Uploading song to Unbothered...";
+
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "title",
+            document.getElementById(
+                "title"
+            ).value
+        );
+
+
+        formData.append(
+            "artist",
+            document.getElementById(
+                "artist"
+            ).value
+        );
+
+
+        formData.append(
+            "album",
+            document.getElementById(
+                "album"
+            ).value
+        );
+
+
+        formData.append(
+            "release_date",
+            document.getElementById(
+                "release_date"
+            ).value
+        );
+
+
+        formData.append(
+            "quality",
+            document.getElementById(
+                "quality"
+            ).value
+        );
+
+
+        formData.append(
+            "audio",
+            audioFile
+        );
+
+
+        if (coverFile) {
+
+            formData.append(
+                "cover",
+                coverFile
+            );
+        }
+
+
+        try {
+
+            /*
+                IMPORTANT:
+                No localhost URL here.
+
+                This automatically uses the
+                current Unbothered website/server.
+            */
+
+            const response =
+                await fetch(
+                    "/api/songs",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (response.ok) {
+
+                message.textContent =
+                    "Song added successfully! 🎵";
+
+                form.reset();
+
+            } else {
+
+                console.error(
+                    "Upload error:",
+                    result
+                );
+
+                message.textContent =
+                    result.error ||
+                    "Upload failed.";
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Connection error:",
+                error
+            );
+
+            message.textContent =
+                "Could not connect to Unbothered server.";
+
+        }
+
+
+        submitButton.disabled =
+            false;
+
+        submitButton.textContent =
+            "ADD SONG";
 
     }
-
-});
+);
 
 </script>
 
 </body>
+
 </html>

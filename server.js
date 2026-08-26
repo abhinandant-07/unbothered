@@ -18,12 +18,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend
 app.use(express.static(__dirname));
 
 
 // ==========================================
-// LOCAL UPLOADS
+// LOCAL UPLOAD SETUP
 // ==========================================
 
 const uploadsPath = path.join(__dirname, "uploads");
@@ -33,22 +32,18 @@ if (!fs.existsSync(uploadsPath)) {
 }
 
 const storage = multer.diskStorage({
-
     destination: function (req, file, cb) {
         cb(null, uploadsPath);
     },
 
     filename: function (req, file, cb) {
 
-        const extension =
-            path.extname(file.originalname);
+        const extension = path.extname(file.originalname);
 
         const filename =
             Date.now() +
             "-" +
-            Math.random()
-                .toString(36)
-                .substring(2, 8) +
+            Math.random().toString(36).substring(2, 8) +
             extension;
 
         cb(null, filename);
@@ -63,6 +58,20 @@ app.use(
     "/uploads",
     express.static(uploadsPath)
 );
+
+
+// ==========================================
+// SUPABASE CONFIGURATION
+// ==========================================
+
+const SUPABASE_URL =
+    process.env.SUPABASE_URL;
+
+const SUPABASE_ANON_KEY =
+    process.env.SUPABASE_ANON_KEY;
+
+const SUPABASE_SERVICE_ROLE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 
 // ==========================================
@@ -88,88 +97,48 @@ app.get("/api/songs", async (req, res) => {
 
     try {
 
-        const supabaseUrl =
-            process.env.SUPABASE_URL;
-
-        const supabaseKey =
-            process.env.SUPABASE_ANON_KEY;
-
-
-        // Check environment variables
-        if (!supabaseUrl || !supabaseKey) {
-
-            console.error(
-                "Supabase environment variables are missing"
-            );
+        if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 
             return res.status(500).json({
-
                 error:
                     "Supabase environment variables are missing"
-
             });
+
         }
 
-
-        // Request songs from Supabase
         const response = await fetch(
-
-            `${supabaseUrl}/rest/v1/songs?select=*`,
-
+            `${SUPABASE_URL}/rest/v1/songs?select=*`,
             {
                 method: "GET",
 
                 headers: {
-
                     "apikey":
-                        supabaseKey,
+                        SUPABASE_ANON_KEY,
 
                     "Authorization":
-                        `Bearer ${supabaseKey}`,
+                        `Bearer ${SUPABASE_ANON_KEY}`,
 
                     "Content-Type":
                         "application/json"
                 }
             }
-
         );
 
-
-        // Read Supabase response
         const data =
             await response.json();
 
-
-        // Supabase error
         if (!response.ok) {
 
             console.error(
-                "Supabase error:",
+                "Supabase songs error:",
                 data
             );
 
-            return res.status(
-                response.status
-            ).json({
-
-                error:
-                    "Supabase error",
-
-                details:
-                    data
-
+            return res.status(response.status).json({
+                error: "Supabase error",
+                details: data
             });
         }
-
-
-        // ==========================================
-        // IMPORTANT:
-        // Convert Supabase column names
-        // to the names expected by index.html
-        //
-        // audio_url -> audio
-        // cover_url -> cover
-        // ==========================================
 
         const songs =
             data.map(song => ({
@@ -197,22 +166,11 @@ app.get("/api/songs", async (req, res) => {
 
                 release_date:
                     song.release_date || null
-
             }));
 
-
-        console.log(
-            "Songs fetched:",
-            songs.length
-        );
-
-
-        // Send songs to frontend
         res.json(songs);
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "Songs API error:",
@@ -220,45 +178,56 @@ app.get("/api/songs", async (req, res) => {
         );
 
         res.status(500).json({
-
             error:
                 "Failed to fetch songs",
-
             details:
                 error.message
-
         });
-
     }
-
 });
 
 
 // ==========================================
-// ADD SONG
+// ADMIN ADD SONG
 // ==========================================
 
 app.post(
-
     "/api/songs",
 
     upload.fields([
-
         {
             name: "audio",
             maxCount: 1
         },
-
         {
             name: "cover",
             maxCount: 1
         }
-
     ]),
 
-    (req, res) => {
+    async (req, res) => {
 
         try {
+
+            // ------------------------------------------
+            // CHECK SUPABASE SERVICE KEY
+            // ------------------------------------------
+
+            if (
+                !SUPABASE_URL ||
+                !SUPABASE_SERVICE_ROLE_KEY
+            ) {
+
+                return res.status(500).json({
+                    error:
+                        "Supabase service configuration is missing."
+                });
+            }
+
+
+            // ------------------------------------------
+            // FORM DATA
+            // ------------------------------------------
 
             const {
                 title,
@@ -269,32 +238,29 @@ app.post(
             } = req.body;
 
 
-            // Check title
             if (!title || !artist) {
 
                 return res.status(400).json({
-
                     error:
                         "Song title and artist are required."
-
                 });
-
             }
 
 
-            // Check audio
+            // ------------------------------------------
+            // AUDIO FILE
+            // ------------------------------------------
+
             if (
                 !req.files ||
-                !req.files.audio
+                !req.files.audio ||
+                !req.files.audio[0]
             ) {
 
                 return res.status(400).json({
-
                     error:
                         "Audio file is required."
-
                 });
-
             }
 
 
@@ -302,72 +268,293 @@ app.post(
                 req.files.audio[0];
 
 
-            // Cover is optional
             const coverFile =
-                req.files.cover
+                req.files.cover &&
+                req.files.cover[0]
                     ? req.files.cover[0]
                     : null;
 
 
-            // Audio path
-            const audioPath =
-                "/uploads/" +
-                audioFile.filename;
+            // ------------------------------------------
+            // CREATE UNIQUE FILE NAMES
+            // ------------------------------------------
+
+            const audioExtension =
+                path.extname(
+                    audioFile.originalname
+                );
+
+            const audioFileName =
+                Date.now() +
+                "-" +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 8) +
+                audioExtension;
 
 
-            // Cover path
-            const coverPath =
-                coverFile
-                    ? "/uploads/" +
-                      coverFile.filename
-                    : null;
+            let coverFileName = null;
+
+            if (coverFile) {
+
+                const coverExtension =
+                    path.extname(
+                        coverFile.originalname
+                    );
+
+                coverFileName =
+                    Date.now() +
+                    "-" +
+                    Math.random()
+                        .toString(36)
+                        .substring(2, 8) +
+                    coverExtension;
+            }
 
 
-            // Save to local database
-            const result =
-                db.prepare(`
+            // ------------------------------------------
+            // UPLOAD AUDIO TO SUPABASE
+            // ------------------------------------------
 
-                    INSERT INTO songs
+            const audioBuffer =
+                fs.readFileSync(
+                    audioFile.path
+                );
 
-                    (
-                        title,
-                        artist,
-                        album,
-                        cover,
-                        audio,
-                        quality,
-                        release_date
-                    )
+            const audioUploadResponse =
+                await fetch(
 
-                    VALUES
-                    (?, ?, ?, ?, ?, ?, ?)
+                    `${SUPABASE_URL}/storage/v1/object/audio1/${encodeURIComponent(audioFileName)}`,
 
-                `).run(
+                    {
+                        method: "POST",
 
-                    title,
+                        headers: {
+                            "Authorization":
+                                `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
 
-                    artist,
+                            "apikey":
+                                SUPABASE_SERVICE_ROLE_KEY,
 
-                    album || null,
+                            "Content-Type":
+                                audioFile.mimetype ||
+                                "audio/mpeg",
 
-                    coverPath,
+                            "x-upsert":
+                                "true"
+                        },
 
-                    audioPath,
-
-                    quality ||
-                        "Original",
-
-                    release_date ||
-                        null
-
+                        body:
+                            audioBuffer
+                    }
                 );
 
 
-            console.log(
-                "Song added:",
-                title
-            );
+            if (!audioUploadResponse.ok) {
 
+                const errorText =
+                    await audioUploadResponse.text();
+
+                console.error(
+                    "Audio upload failed:",
+                    errorText
+                );
+
+                return res.status(500).json({
+                    error:
+                        "Audio upload to Supabase failed.",
+                    details:
+                        errorText
+                });
+            }
+
+
+            // ------------------------------------------
+            // AUDIO PUBLIC URL
+            // ------------------------------------------
+
+            const audioUrl =
+                `${SUPABASE_URL}/storage/v1/object/public/audio1/${encodeURIComponent(audioFileName)}`;
+
+
+            // ------------------------------------------
+            // UPLOAD COVER IF PROVIDED
+            // ------------------------------------------
+
+            let coverUrl = null;
+
+            if (coverFile) {
+
+                const coverBuffer =
+                    fs.readFileSync(
+                        coverFile.path
+                    );
+
+                const coverUploadResponse =
+                    await fetch(
+
+                        `${SUPABASE_URL}/storage/v1/object/audio1/${encodeURIComponent(coverFileName)}`,
+
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+
+                                "apikey":
+                                    SUPABASE_SERVICE_ROLE_KEY,
+
+                                "Content-Type":
+                                    coverFile.mimetype ||
+                                    "image/jpeg",
+
+                                "x-upsert":
+                                    "true"
+                            },
+
+                            body:
+                                coverBuffer
+                        }
+                    );
+
+
+                if (!coverUploadResponse.ok) {
+
+                    const errorText =
+                        await coverUploadResponse.text();
+
+                    console.error(
+                        "Cover upload failed:",
+                        errorText
+                    );
+
+                    return res.status(500).json({
+                        error:
+                            "Cover upload to Supabase failed.",
+                        details:
+                            errorText
+                    });
+                }
+
+
+                coverUrl =
+                    `${SUPABASE_URL}/storage/v1/object/public/audio1/${encodeURIComponent(coverFileName)}`;
+            }
+
+
+            // ------------------------------------------
+            // INSERT SONG INTO SUPABASE TABLE
+            // ------------------------------------------
+
+            const insertResponse =
+                await fetch(
+                    `${SUPABASE_URL}/rest/v1/songs`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "apikey":
+                                SUPABASE_SERVICE_ROLE_KEY,
+
+                            "Authorization":
+                                `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Prefer":
+                                "return=representation"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                title:
+                                    title,
+
+                                artist:
+                                    artist,
+
+                                album:
+                                    album || null,
+
+                                audio_url:
+                                    audioUrl,
+
+                                cover_url:
+                                    coverUrl,
+
+                                quality:
+                                    quality ||
+                                    "Original",
+
+                                release_date:
+                                    release_date ||
+                                    null
+                            })
+                    }
+                );
+
+
+            const insertData =
+                await insertResponse.json();
+
+
+            if (!insertResponse.ok) {
+
+                console.error(
+                    "Song database insert failed:",
+                    insertData
+                );
+
+                return res.status(
+                    insertResponse.status
+                ).json({
+
+                    error:
+                        "Could not add song to Supabase.",
+
+                    details:
+                        insertData
+
+                });
+            }
+
+
+            // ------------------------------------------
+            // DELETE TEMPORARY LOCAL FILES
+            // ------------------------------------------
+
+            try {
+
+                if (fs.existsSync(audioFile.path)) {
+                    fs.unlinkSync(audioFile.path);
+                }
+
+                if (
+                    coverFile &&
+                    fs.existsSync(coverFile.path)
+                ) {
+                    fs.unlinkSync(coverFile.path);
+                }
+
+            } catch (cleanupError) {
+
+                console.error(
+                    "Temporary file cleanup error:",
+                    cleanupError
+                );
+            }
+
+
+            // ------------------------------------------
+            // SUCCESS
+            // ------------------------------------------
+
+            console.log(
+                `Song added to Supabase: ${title}`
+            );
 
             res.json({
 
@@ -377,20 +564,11 @@ app.post(
                 message:
                     "Song added successfully!",
 
-                songId:
-                    result.lastInsertRowid,
-
-                audio:
-                    audioPath,
-
-                cover:
-                    coverPath
-
+                song:
+                    insertData[0] || null
             });
 
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(
                 "Add song error:",
@@ -404,13 +582,9 @@ app.post(
 
                 details:
                     error.message
-
             });
-
         }
-
     }
-
 );
 
 
@@ -419,11 +593,8 @@ app.post(
 // ==========================================
 
 app.listen(
-
     PORT,
-
     "0.0.0.0",
-
     () => {
 
         console.log(
@@ -431,5 +602,4 @@ app.listen(
         );
 
     }
-
 );
