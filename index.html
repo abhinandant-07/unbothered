@@ -1,29 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-    <meta name="theme-color" content="#0b0b0b">
+
+    <meta
+        name="theme-color"
+        content="#0b0b0b"
+    >
 
     <title>Unbothered</title>
-    <link rel="manifest" href="/manifest.json">
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 
 <body>
 
-<!-- =========================
+<!-- =====================================================
      SIDEBAR
-========================= -->
+===================================================== -->
 
 <aside class="sidebar">
 
     <div class="brand">
-        â™ª Unbothered
+        &#9835; Unbothered
     </div>
 
     <nav>
@@ -32,21 +45,21 @@
             class="nav active"
             onclick="showSection('home')"
         >
-            ðŸ  Home
+            &#127968; Home
         </button>
 
         <button
             class="nav"
             onclick="showSection('search')"
         >
-            ðŸ” Search
+            &#128269; Search
         </button>
 
         <button
             class="nav"
             onclick="showSection('library')"
         >
-            ðŸ“š Your Library
+            &#128218; Your Library
         </button>
 
     </nav>
@@ -56,42 +69,45 @@
     </div>
 
     <button class="playlist">
-        â¤ï¸ Liked Songs
+        &#10084;&#65039; Liked Songs
     </button>
 
     <button class="playlist">
-        ðŸ•˜ Recently Played
+        &#128339; Recently Played
     </button>
 
     <button class="playlist">
-        â¬‡ Downloads
+        &#11015; Downloads
     </button>
 
     <button class="playlist">
-        ï¼‹ Create Playlist
+        &#65291; Create Playlist
     </button>
 
 </aside>
 
 
-<!-- =========================
+<!-- =====================================================
      MAIN
-========================= -->
+===================================================== -->
 
 <main class="main">
 
-    <!-- TOP BAR -->
+
+    <!-- =================================================
+         TOP BAR
+    ================================================== -->
 
     <header class="topbar">
 
         <div class="arrows">
 
             <button onclick="history.back()">
-                â€¹
+                &#8249;
             </button>
 
             <button onclick="history.forward()">
-                â€º
+                &#8250;
             </button>
 
         </div>
@@ -112,9 +128,9 @@
     </header>
 
 
-    <!-- =========================
+    <!-- =================================================
          HOME
-    ========================= -->
+    ================================================== -->
 
     <section
         id="home"
@@ -130,7 +146,7 @@
         </p>
 
 
-        <!-- MOODS -->
+        <!-- QUICK ACCESS -->
 
         <h2>
             Quick access
@@ -139,25 +155,25 @@
         <div class="quick-grid">
 
             <button class="quick">
-                ðŸŒ™ Chill
+                &#127769; Chill
             </button>
 
             <button class="quick">
-                ðŸŽ¯ Focus
+                &#127919; Focus
             </button>
 
             <button class="quick">
-                âš¡ Energy
+                &#9889; Energy
             </button>
 
             <button class="quick">
-                ðŸ˜´ Sleep
+                &#128564; Sleep
             </button>
 
         </div>
 
 
-        <!-- SPECIAL CARDS -->
+        <!-- SHORTCUTS -->
 
         <h2>
             Your shortcuts
@@ -165,10 +181,11 @@
 
         <div class="cards">
 
+
             <article class="card">
 
                 <div class="cover">
-                    â¤ï¸
+                    &#10084;&#65039;
                 </div>
 
                 <strong>
@@ -179,8 +196,11 @@
                     Your favorite music
                 </p>
 
-                <button class="play">
-                    â–¶
+                <button
+                    class="play"
+                    onclick="showSection('library')"
+                >
+                    &#9654;
                 </button>
 
             </article>
@@ -189,7 +209,7 @@
             <article class="card">
 
                 <div class="cover">
-                    ðŸ•˜
+                    &#128339;
                 </div>
 
                 <strong>
@@ -200,8 +220,11 @@
                     Continue listening
                 </p>
 
-                <button class="play">
-                    â–¶
+                <button
+                    class="play"
+                    onclick="showSection('library')"
+                >
+                    &#9654;
                 </button>
 
             </article>
@@ -210,7 +233,7 @@
             <article class="card">
 
                 <div class="cover">
-                    ðŸŽµ
+                    &#127925;
                 </div>
 
                 <strong>
@@ -225,7 +248,7 @@
                     class="play"
                     onclick="showSection('library')"
                 >
-                    â–¶
+                    &#9654;
                 </button>
 
             </article>
@@ -233,7 +256,7 @@
         </div>
 
 
-        <!-- SONGS -->
+        <!-- SONG LIST -->
 
         <h2>
             Your Music
@@ -247,7 +270,7 @@
             <div class="empty">
 
                 <div class="empty-icon">
-                    ðŸŽµ
+                    &#127925;
                 </div>
 
                 <h3>
@@ -266,9 +289,9 @@
     </section>
 
 
-    <!-- =========================
+    <!-- =================================================
          SEARCH
-    ========================= -->
+    ================================================== -->
 
     <section
         id="search"
@@ -284,7 +307,7 @@
             <div class="empty">
 
                 <div class="empty-icon">
-                    ðŸ”
+                    &#128269;
                 </div>
 
                 <h3>
@@ -302,9 +325,9 @@
     </section>
 
 
-    <!-- =========================
+    <!-- =================================================
          LIBRARY
-    ========================= -->
+    ================================================== -->
 
     <section
         id="library"
@@ -318,31 +341,46 @@
         <div class="library-grid">
 
             <div class="library-card">
-                â¤ï¸
+
+                &#10084;&#65039;
+
                 <strong>
                     Liked Songs
                 </strong>
+
             </div>
 
+
             <div class="library-card">
-                ðŸ•˜
+
+                &#128339;
+
                 <strong>
                     Recently Played
                 </strong>
+
             </div>
 
+
             <div class="library-card">
-                â¬‡
+
+                &#11015;
+
                 <strong>
                     Downloads
                 </strong>
+
             </div>
 
+
             <div class="library-card">
-                ðŸŽµ
+
+                &#127925;
+
                 <strong>
                     All Songs
                 </strong>
+
             </div>
 
         </div>
@@ -352,9 +390,9 @@
 </main>
 
 
-<!-- =========================
+<!-- =====================================================
      MUSIC PLAYER
-========================= -->
+===================================================== -->
 
 <footer class="player">
 
@@ -367,7 +405,7 @@
             id="miniCover"
             class="mini-cover"
         >
-            â™ª
+            &#9835;
         </div>
 
 
@@ -390,24 +428,30 @@
 
     <div class="controls">
 
-
         <div class="control-buttons">
+
+
+            <!-- SHUFFLE -->
 
             <button
                 onclick="shuffle()"
                 title="Shuffle"
             >
-                ðŸ”€
+                &#128256;
             </button>
 
+
+            <!-- PREVIOUS -->
 
             <button
                 onclick="previousSong()"
                 title="Previous"
             >
-                â®
+                &#9194;
             </button>
 
+
+            <!-- PLAY / PAUSE -->
 
             <button
                 id="playButton"
@@ -415,24 +459,28 @@
                 onclick="togglePlay()"
                 title="Play"
             >
-                â–¶
+                &#9654;
             </button>
 
+
+            <!-- NEXT -->
 
             <button
                 onclick="nextSong()"
                 title="Next"
             >
-                â­
+                &#9193;
             </button>
 
+
+            <!-- REPEAT -->
 
             <button
                 onclick="toggleRepeat()"
                 id="repeatButton"
                 title="Repeat"
             >
-                ðŸ”
+                &#128257;
             </button>
 
         </div>
@@ -446,7 +494,6 @@
                 0:00
             </span>
 
-
             <input
                 id="progress"
                 type="range"
@@ -456,7 +503,6 @@
                 step="0.1"
                 oninput="seekSong()"
             >
-
 
             <span id="duration">
                 0:00
@@ -472,7 +518,7 @@
     <div class="volume">
 
         <span>
-            ðŸ”Š
+            &#128266;
         </span>
 
         <input
@@ -490,9 +536,9 @@
 </footer>
 
 
-<!-- =========================
+<!-- =====================================================
      AUDIO ELEMENT
-========================= -->
+===================================================== -->
 
 <audio
     id="audioPlayer"
@@ -502,9 +548,9 @@
 
 <script>
 
-/* =========================================
+/* =====================================================
    GLOBAL VARIABLES
-========================================= */
+===================================================== */
 
 const audio =
     document.getElementById("audioPlayer");
@@ -527,6 +573,7 @@ const currentArtist =
 const miniCover =
     document.getElementById("miniCover");
 
+
 let songs = [];
 
 let currentIndex = -1;
@@ -534,9 +581,9 @@ let currentIndex = -1;
 let repeatEnabled = false;
 
 
-/* =========================================
+/* =====================================================
    NAVIGATION
-========================================= */
+===================================================== */
 
 function showSection(section) {
 
@@ -571,9 +618,9 @@ function showSection(section) {
 }
 
 
-/* =========================================
+/* =====================================================
    LOAD SONGS FROM SERVER
-========================================= */
+===================================================== */
 
 async function loadSongs() {
 
@@ -596,7 +643,14 @@ async function loadSongs() {
             await response.json();
 
 
+        console.log(
+            "Songs loaded:",
+            songs
+        );
+
+
         displaySongs(songs);
+
 
     } catch (error) {
 
@@ -613,9 +667,9 @@ async function loadSongs() {
 }
 
 
-/* =========================================
+/* =====================================================
    DISPLAY SONGS
-========================================= */
+===================================================== */
 
 function displaySongs(songArray) {
 
@@ -623,15 +677,17 @@ function displaySongs(songArray) {
         document.getElementById("songList");
 
 
-    if (!songArray ||
-        songArray.length === 0) {
+    if (
+        !songArray ||
+        songArray.length === 0
+    ) {
 
         list.innerHTML = `
 
             <div class="empty">
 
                 <div class="empty-icon">
-                    ðŸŽµ
+                    &#127925;
                 </div>
 
                 <h3>
@@ -666,6 +722,21 @@ function displaySongs(songArray) {
                 "song-row";
 
 
+            const coverHTML =
+                song.cover_url
+                    ? `
+                        <img
+                            src="${escapeHtml(song.cover_url)}"
+                            alt=""
+                        >
+                    `
+                    : `
+                        <span>
+                            &#9835;
+                        </span>
+                    `;
+
+
             row.innerHTML = `
 
                 <div class="song-number">
@@ -674,22 +745,7 @@ function displaySongs(songArray) {
 
 
                 <div class="song-art">
-
-                    ${
-                        song.cover_url
-
-                        ?
-
-                        `<img
-                            src="${song.cover_url}"
-                            alt=""
-                        >`
-
-                        :
-
-                        "â™ª"
-                    }
-
+                    ${coverHTML}
                 </div>
 
 
@@ -708,11 +764,9 @@ function displaySongs(songArray) {
 
                 <div class="song-quality">
 
-                    ${
-                        escapeHtml(
-                            song.quality || ""
-                        )
-                    }
+                    ${escapeHtml(
+                        song.quality || ""
+                    )}
 
                 </div>
 
@@ -722,7 +776,7 @@ function displaySongs(songArray) {
                     onclick="playSong(${index})"
                     title="Play"
                 >
-                    â–¶
+                    &#9654;
                 </button>
 
             `;
@@ -736,9 +790,9 @@ function displaySongs(songArray) {
 }
 
 
-/* =========================================
+/* =====================================================
    PLAY SONG
-========================================= */
+===================================================== */
 
 function playSong(index) {
 
@@ -757,15 +811,37 @@ function playSong(index) {
         index;
 
 
+    /* =========================================
+       IMPORTANT:
+       SUPABASE COLUMN = audio_url
+    ========================================= */
+
     if (!song.audio_url) {
 
-        console.warn(
-            "This song has no audio file."
+        console.error(
+            "This song has no audio_url:",
+            song
+        );
+
+        alert(
+            "This song does not have an audio file."
         );
 
         return;
 
     }
+
+
+    console.log(
+        "Playing:",
+        song.title
+    );
+
+
+    console.log(
+        "Audio URL:",
+        song.audio_url
+    );
 
 
     audio.src =
@@ -776,21 +852,23 @@ function playSong(index) {
 
 
     currentTitle.textContent =
-        song.title;
+        song.title || "Unknown Song";
 
 
     currentArtist.textContent =
-        song.artist;
+        song.artist || "Unknown Artist";
 
 
-    /* COVER */
+    /* =========================================
+       COVER
+    ========================================= */
 
     if (song.cover_url) {
 
         miniCover.innerHTML = `
 
             <img
-                src="${song.cover_url}"
+                src="${escapeHtml(song.cover_url)}"
                 alt=""
             >
 
@@ -798,46 +876,58 @@ function playSong(index) {
 
     } else {
 
-        miniCover.textContent =
-            "â™ª";
+        miniCover.innerHTML =
+            "&#9835;";
 
     }
 
 
-    /* MEDIA SESSION */
+    /* =========================================
+       MEDIA SESSION
+    ========================================= */
 
     setupMediaSession(song);
 
 
+    /* =========================================
+       PLAY
+    ========================================= */
+
     audio.play()
         .then(() => {
 
-            playButton.textContent =
-                "â¸";
+            playButton.innerHTML =
+                "&#10074;&#10074;";
 
         })
         .catch(error => {
 
-            console.log(
-                "Playback waiting for user interaction:",
+            console.error(
+                "Playback error:",
                 error
             );
 
-            playButton.textContent =
-                "â–¶";
+            playButton.innerHTML =
+                "&#9654;";
 
         });
 
 }
 
 
-/* =========================================
+/* =====================================================
    PLAY / PAUSE
-========================================= */
+===================================================== */
 
 function togglePlay() {
 
     if (!audio.src) {
+
+        if (songs.length > 0) {
+
+            playSong(0);
+
+        }
 
         return;
 
@@ -849,13 +939,14 @@ function togglePlay() {
         audio.play()
             .then(() => {
 
-                playButton.textContent =
-                    "â¸";
+                playButton.innerHTML =
+                    "&#10074;&#10074;";
 
             })
             .catch(error => {
 
                 console.error(
+                    "Play error:",
                     error
                 );
 
@@ -865,17 +956,17 @@ function togglePlay() {
 
         audio.pause();
 
-        playButton.textContent =
-            "â–¶";
+        playButton.innerHTML =
+            "&#9654;";
 
     }
 
 }
 
 
-/* =========================================
+/* =====================================================
    NEXT SONG
-========================================= */
+===================================================== */
 
 function nextSong() {
 
@@ -886,8 +977,10 @@ function nextSong() {
     }
 
 
-    if (repeatEnabled &&
-        currentIndex >= 0) {
+    if (
+        repeatEnabled &&
+        currentIndex >= 0
+    ) {
 
         playSong(currentIndex);
 
@@ -914,9 +1007,9 @@ function nextSong() {
 }
 
 
-/* =========================================
+/* =====================================================
    PREVIOUS SONG
-========================================= */
+===================================================== */
 
 function previousSong() {
 
@@ -926,11 +1019,6 @@ function previousSong() {
 
     }
 
-
-    /*
-       If song already played for more than
-       3 seconds, restart it.
-    */
 
     if (audio.currentTime > 3) {
 
@@ -957,9 +1045,9 @@ function previousSong() {
 }
 
 
-/* =========================================
+/* =====================================================
    AUTO NEXT
-========================================= */
+===================================================== */
 
 audio.addEventListener(
     "ended",
@@ -981,16 +1069,16 @@ audio.addEventListener(
 );
 
 
-/* =========================================
-   PLAY / PAUSE EVENTS
-========================================= */
+/* =====================================================
+   PLAY EVENT
+===================================================== */
 
 audio.addEventListener(
     "play",
     () => {
 
-        playButton.textContent =
-            "â¸";
+        playButton.innerHTML =
+            "&#10074;&#10074;";
 
 
         updateMediaSessionState(
@@ -1001,12 +1089,16 @@ audio.addEventListener(
 );
 
 
+/* =====================================================
+   PAUSE EVENT
+===================================================== */
+
 audio.addEventListener(
     "pause",
     () => {
 
-        playButton.textContent =
-            "â–¶";
+        playButton.innerHTML =
+            "&#9654;";
 
 
         updateMediaSessionState(
@@ -1017,16 +1109,35 @@ audio.addEventListener(
 );
 
 
-/* =========================================
+/* =====================================================
+   AUDIO ERROR
+===================================================== */
+
+audio.addEventListener(
+    "error",
+    () => {
+
+        console.error(
+            "Audio element error:",
+            audio.error
+        );
+
+    }
+);
+
+
+/* =====================================================
    PROGRESS
-========================================= */
+===================================================== */
 
 audio.addEventListener(
     "timeupdate",
     () => {
 
-        if (!audio.duration ||
-            isNaN(audio.duration)) {
+        if (
+            !audio.duration ||
+            isNaN(audio.duration)
+        ) {
 
             return;
 
@@ -1058,9 +1169,9 @@ audio.addEventListener(
 );
 
 
-/* =========================================
+/* =====================================================
    METADATA LOADED
-========================================= */
+===================================================== */
 
 audio.addEventListener(
     "loadedmetadata",
@@ -1074,21 +1185,22 @@ audio.addEventListener(
             );
 
 
-        progress.value =
-            0;
+        progress.value = 0;
 
     }
 );
 
 
-/* =========================================
+/* =====================================================
    SEEK
-========================================= */
+===================================================== */
 
 function seekSong() {
 
-    if (!audio.duration ||
-        isNaN(audio.duration)) {
+    if (
+        !audio.duration ||
+        isNaN(audio.duration)
+    ) {
 
         return;
 
@@ -1099,19 +1211,22 @@ function seekSong() {
         (
             Number(progress.value) /
             100
-        ) * audio.duration;
+        ) *
+        audio.duration;
 
 }
 
 
-/* =========================================
+/* =====================================================
    FORMAT TIME
-========================================= */
+===================================================== */
 
 function formatTime(seconds) {
 
-    if (!seconds ||
-        isNaN(seconds)) {
+    if (
+        !seconds ||
+        isNaN(seconds)
+    ) {
 
         return "0:00";
 
@@ -1140,9 +1255,9 @@ function formatTime(seconds) {
 }
 
 
-/* =========================================
+/* =====================================================
    VOLUME
-========================================= */
+===================================================== */
 
 function changeVolume() {
 
@@ -1152,9 +1267,9 @@ function changeVolume() {
 }
 
 
-/* =========================================
+/* =====================================================
    SHUFFLE
-========================================= */
+===================================================== */
 
 function shuffle() {
 
@@ -1177,9 +1292,9 @@ function shuffle() {
 }
 
 
-/* =========================================
+/* =====================================================
    REPEAT
-========================================= */
+===================================================== */
 
 function toggleRepeat() {
 
@@ -1208,9 +1323,9 @@ function toggleRepeat() {
 }
 
 
-/* =========================================
+/* =====================================================
    SEARCH
-========================================= */
+===================================================== */
 
 function searchSongs() {
 
@@ -1235,7 +1350,7 @@ function searchSongs() {
                 <div class="empty">
 
                     <div class="empty-icon">
-                        ðŸ”
+                        &#128269;
                     </div>
 
                     <h3>
@@ -1295,9 +1410,9 @@ function searchSongs() {
 }
 
 
-/* =========================================
+/* =====================================================
    SEARCH RESULTS
-========================================= */
+===================================================== */
 
 function displaySearchResults(
     results
@@ -1316,7 +1431,7 @@ function displaySearchResults(
             <div class="empty">
 
                 <div class="empty-icon">
-                    ðŸ”
+                    &#128269;
                 </div>
 
                 <h3>
@@ -1397,10 +1512,10 @@ function displaySearchResults(
 }
 
 
-/* =========================================
+/* =====================================================
    MEDIA SESSION
-   LOCK SCREEN CONTROLS
-========================================= */
+   PHONE LOCK SCREEN CONTROLS
+===================================================== */
 
 function setupMediaSession(song) {
 
@@ -1421,9 +1536,14 @@ function setupMediaSession(song) {
         artwork = [
 
             {
-                src: song.cover_url,
-                sizes: "512x512",
-                type: "image/jpeg"
+                src:
+                    song.cover_url,
+
+                sizes:
+                    "512x512",
+
+                type:
+                    "image/jpeg"
             }
 
         ];
@@ -1435,13 +1555,16 @@ function setupMediaSession(song) {
         new MediaMetadata({
 
             title:
-                song.title || "Unknown Song",
+                song.title ||
+                "Unknown Song",
 
             artist:
-                song.artist || "Unknown Artist",
+                song.artist ||
+                "Unknown Artist",
 
             album:
-                song.album || "Unbothered",
+                song.album ||
+                "Unbothered",
 
             artwork:
                 artwork
@@ -1555,9 +1678,9 @@ function setupMediaSession(song) {
 }
 
 
-/* =========================================
+/* =====================================================
    MEDIA SESSION STATE
-========================================= */
+===================================================== */
 
 function updateMediaSessionState(
     state
@@ -1575,9 +1698,9 @@ function updateMediaSessionState(
 }
 
 
-/* =========================================
+/* =====================================================
    MEDIA SESSION POSITION
-========================================= */
+===================================================== */
 
 function updateMediaSessionPosition() {
 
@@ -1623,9 +1746,9 @@ function updateMediaSessionPosition() {
 }
 
 
-/* =========================================
+/* =====================================================
    HTML ESCAPING
-========================================= */
+===================================================== */
 
 function escapeHtml(text) {
 
@@ -1644,34 +1767,49 @@ function escapeHtml(text) {
 }
 
 
-/* =========================================
+/* =====================================================
    START APP
-========================================= */
+===================================================== */
 
 audio.volume =
     Number(volume.value);
 
 
 loadSongs();
-if ("serviceWorker" in navigator) {
 
-    window.addEventListener("load", () => {
 
-        navigator.serviceWorker
-            .register("/sw.js")
-            .then(() => {
-                console.log(
-                    "Unbothered app installed successfully."
-                );
-            })
-            .catch(error => {
-                console.error(
-                    "Service Worker error:",
-                    error
-                );
-            });
+/* =====================================================
+   SERVICE WORKER
+===================================================== */
 
-    });
+if (
+    "serviceWorker" in navigator
+) {
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register("/sw.js")
+                .then(() => {
+
+                    console.log(
+                        "Unbothered app installed successfully."
+                    );
+
+                })
+                .catch(error => {
+
+                    console.error(
+                        "Service Worker error:",
+                        error
+                    );
+
+                });
+
+        }
+    );
 
 }
 
