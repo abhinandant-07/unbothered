@@ -148,7 +148,7 @@ app.post(
     }
 );
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
 
     console.log(
         `Unbothered server running at http://localhost:${PORT}`
