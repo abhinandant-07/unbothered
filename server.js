@@ -7,7 +7,9 @@ const multer = require("multer");
 const db = require("./database");
 
 const app = express();
-const PORT = 3000;
+
+// Render provides PORT; local computer uses 3000
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -148,10 +150,11 @@ app.post(
     }
 );
 
-app.listen(PORT, () => {
+// IMPORTANT: Render needs 0.0.0.0 and its assigned PORT
+app.listen(PORT, "0.0.0.0", () => {
 
     console.log(
-        `Unbothered server running at http://localhost:${PORT}`
+        `Unbothered server running on port ${PORT}`
     );
 
 });
