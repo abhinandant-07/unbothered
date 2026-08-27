@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Unbothered - Add Song</title>
+    <title>Unbothered - Admin</title>
 
     <style>
 
@@ -28,16 +28,25 @@
         }
 
         .container {
-            max-width: 650px;
+            max-width: 700px;
             margin: auto;
+        }
+
+        .card {
             background: #151515;
             padding: 30px;
             border-radius: 14px;
+            margin-bottom: 25px;
         }
 
         h1 {
             margin-top: 0;
             font-size: 30px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 22px;
         }
 
         .subtitle {
@@ -66,7 +75,7 @@
             padding: 10px;
         }
 
-        button {
+        .add-button {
             width: 100%;
             margin-top: 28px;
             padding: 14px;
@@ -79,11 +88,11 @@
             cursor: pointer;
         }
 
-        button:hover {
+        .add-button:hover {
             background: #ddd;
         }
 
-        button:disabled {
+        .add-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
@@ -101,6 +110,117 @@
             text-decoration: none;
         }
 
+        .back:hover {
+            color: white;
+        }
+
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .song-item {
+            background: #0d0d0d;
+            border: 1px solid #292929;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .song-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .song-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .song-artist {
+            color: #999;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .delete-button {
+            flex-shrink: 0;
+            border: 1px solid #444;
+            background: #1a1a1a;
+            color: white;
+            padding: 9px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .delete-button:hover {
+            background: #333;
+        }
+
+        .delete-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .empty {
+            color: #777;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading {
+            color: #999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .refresh-button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #111;
+            color: white;
+            cursor: pointer;
+        }
+
+        .refresh-button:hover {
+            background: #222;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .song-item {
+                align-items: flex-start;
+            }
+
+            .delete-button {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+        }
+
     </style>
 
 </head>
@@ -110,6 +230,7 @@
 
 <div class="container">
 
+
     <a
         class="back"
         href="index.html"
@@ -118,132 +239,182 @@
     </a>
 
 
-    <h1>
-        Add a Song
-    </h1>
+    <!-- =====================================
+         ADD SONG
+    ====================================== -->
+
+    <div class="card">
+
+        <h1>
+            Add a Song
+        </h1>
+
+        <div class="subtitle">
+            Add music to your Unbothered library.
+        </div>
 
 
-    <div class="subtitle">
-        Add music to your Unbothered library.
+        <form id="songForm">
+
+
+            <label>
+                Song Title
+            </label>
+
+            <input
+                type="text"
+                id="title"
+                placeholder="Enter song title"
+                required
+            >
+
+
+            <label>
+                Artist
+            </label>
+
+            <input
+                type="text"
+                id="artist"
+                placeholder="Enter artist name"
+                required
+            >
+
+
+            <label>
+                Album
+            </label>
+
+            <input
+                type="text"
+                id="album"
+                placeholder="Enter album name"
+            >
+
+
+            <label>
+                Release Date
+            </label>
+
+            <input
+                type="date"
+                id="release_date"
+            >
+
+
+            <label>
+                Audio File
+            </label>
+
+            <input
+                type="file"
+                id="audio"
+                accept="audio/*"
+                required
+            >
+
+
+            <label>
+                Cover Image
+            </label>
+
+            <input
+                type="file"
+                id="cover"
+                accept="image/*"
+            >
+
+
+            <label>
+                Quality
+            </label>
+
+            <select id="quality">
+
+                <option value="Original">
+                    Original
+                </option>
+
+                <option value="FLAC">
+                    FLAC
+                </option>
+
+                <option value="WAV">
+                    WAV
+                </option>
+
+                <option value="MP3">
+                    MP3
+                </option>
+
+                <option value="AAC">
+                    AAC
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="add-button"
+                id="submitButton"
+            >
+                ADD SONG
+            </button>
+
+
+        </form>
+
+
+        <div id="message"></div>
+
     </div>
 
 
-    <form id="songForm">
 
+    <!-- =====================================
+         EXISTING SONGS
+    ====================================== -->
 
-        <label>
-            Song Title
-        </label>
+    <div class="card">
 
-        <input
-            type="text"
-            id="title"
-            placeholder="Enter song title"
-            required
-        >
-
-
-        <label>
-            Artist
-        </label>
-
-        <input
-            type="text"
-            id="artist"
-            placeholder="Enter artist name"
-            required
-        >
-
-
-        <label>
-            Album
-        </label>
-
-        <input
-            type="text"
-            id="album"
-            placeholder="Enter album name"
-        >
-
-
-        <label>
-            Release Date
-        </label>
-
-        <input
-            type="date"
-            id="release_date"
-        >
-
-
-        <label>
-            Audio File
-        </label>
-
-        <input
-            type="file"
-            id="audio"
-            accept="audio/*"
-            required
-        >
-
-
-        <label>
-            Cover Image
-        </label>
-
-        <input
-            type="file"
-            id="cover"
-            accept="image/*"
-        >
-
-
-        <label>
-            Quality
-        </label>
-
-        <select id="quality">
-
-            <option value="Original">
-                Original
-            </option>
-
-            <option value="FLAC">
-                FLAC
-            </option>
-
-            <option value="WAV">
-                WAV
-            </option>
-
-            <option value="MP3">
-                MP3
-            </option>
-
-            <option value="AAC">
-                AAC
-            </option>
-
-        </select>
-
+        <h2>
+            🎵 Existing Songs
+        </h2>
 
         <button
-            type="submit"
-            id="submitButton"
+            class="refresh-button"
+            id="refreshButton"
+            type="button"
         >
-            ADD SONG
+            ↻ Refresh Songs
         </button>
 
-    </form>
 
+        <div
+            id="songList"
+            class="song-list"
+        >
 
-    <div id="message"></div>
+            <div class="loading">
+                Loading songs...
+            </div>
+
+        </div>
+
+    </div>
+
 
 </div>
 
 
+
 <script>
+
+
+/* =========================================
+   ADD SONG
+========================================= */
 
 const form =
     document.getElementById("songForm");
@@ -280,6 +451,7 @@ form.addEventListener(
                 "Please select an audio file.";
 
             return;
+
         }
 
 
@@ -349,18 +521,11 @@ form.addEventListener(
                 "cover",
                 coverFile
             );
+
         }
 
 
         try {
-
-            /*
-                IMPORTANT:
-                No localhost URL here.
-
-                This automatically uses the
-                current Unbothered website/server.
-            */
 
             const response =
                 await fetch(
@@ -382,6 +547,8 @@ form.addEventListener(
                     "Song added successfully! 🎵";
 
                 form.reset();
+
+                loadSongs();
 
             } else {
 
@@ -417,6 +584,296 @@ form.addEventListener(
 
     }
 );
+
+
+
+/* =========================================
+   EXISTING SONGS
+========================================= */
+
+const songList =
+    document.getElementById(
+        "songList"
+    );
+
+const refreshButton =
+    document.getElementById(
+        "refreshButton"
+    );
+
+
+async function loadSongs() {
+
+    songList.innerHTML =
+        '<div class="loading">Loading songs...</div>';
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/songs"
+            );
+
+
+        const songs =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                songs.error ||
+                "Could not load songs."
+            );
+
+        }
+
+
+        if (
+            !songs ||
+            songs.length === 0
+        ) {
+
+            songList.innerHTML =
+                '<div class="empty">No songs found.</div>';
+
+            return;
+
+        }
+
+
+        songList.innerHTML = "";
+
+
+        songs.forEach(
+            function(song) {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "song-item";
+
+
+                const info =
+                    document.createElement(
+                        "div"
+                    );
+
+                info.className =
+                    "song-info";
+
+
+                const title =
+                    document.createElement(
+                        "div"
+                    );
+
+                title.className =
+                    "song-title";
+
+                title.textContent =
+                    song.title ||
+                    "Unknown Song";
+
+
+                const artist =
+                    document.createElement(
+                        "div"
+                    );
+
+                artist.className =
+                    "song-artist";
+
+                artist.textContent =
+                    song.artist ||
+                    "Unknown Artist";
+
+
+                info.appendChild(
+                    title
+                );
+
+                info.appendChild(
+                    artist
+                );
+
+
+                const deleteButton =
+                    document.createElement(
+                        "button"
+                    );
+
+                deleteButton.className =
+                    "delete-button";
+
+                deleteButton.type =
+                    "button";
+
+                deleteButton.textContent =
+                    "🗑️ DELETE";
+
+
+                deleteButton.addEventListener(
+                    "click",
+                    function() {
+
+                        deleteSong(
+                            song.id,
+                            song.title,
+                            deleteButton
+                        );
+
+                    }
+                );
+
+
+                item.appendChild(
+                    info
+                );
+
+                item.appendChild(
+                    deleteButton
+                );
+
+
+                songList.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Load songs error:",
+            error
+        );
+
+
+        songList.innerHTML =
+            '<div class="empty">Could not load songs.</div>';
+
+    }
+
+}
+
+
+
+/* =========================================
+   DELETE SONG
+========================================= */
+
+async function deleteSong(
+    songId,
+    songTitle,
+    button
+) {
+
+    const confirmed =
+        confirm(
+            'Are you sure you want to delete "' +
+            songTitle +
+            '"?'
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        "DELETING...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/songs/" +
+                songId,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.error ||
+                "Delete failed."
+            );
+
+        }
+
+
+        alert(
+            "Song deleted successfully."
+        );
+
+
+        loadSongs();
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete error:",
+            error
+        );
+
+
+        alert(
+            "Could not delete song: " +
+            error.message
+        );
+
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "🗑️ DELETE";
+
+    }
+
+}
+
+
+
+/* =========================================
+   REFRESH BUTTON
+========================================= */
+
+refreshButton.addEventListener(
+    "click",
+    loadSongs
+);
+
+
+
+/* =========================================
+   LOAD SONGS WHEN PAGE OPENS
+========================================= */
+
+loadSongs();
+
 
 </script>
 
