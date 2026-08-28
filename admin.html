@@ -153,8 +153,14 @@
             white-space: nowrap;
         }
 
-        .delete-button {
+        .song-actions {
+            display: flex;
+            gap: 8px;
             flex-shrink: 0;
+        }
+
+        .delete-button,
+        .edit-button {
             border: 1px solid #444;
             background: #1a1a1a;
             color: white;
@@ -164,11 +170,13 @@
             font-weight: bold;
         }
 
-        .delete-button:hover {
+        .delete-button:hover,
+        .edit-button:hover {
             background: #333;
         }
 
-        .delete-button:disabled {
+        .delete-button:disabled,
+        .edit-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
@@ -200,6 +208,48 @@
             background: #222;
         }
 
+        /* =========================================
+           EDIT FORM
+        ========================================= */
+
+        #editCard {
+            display: none;
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .save-edit-button,
+        .cancel-edit-button {
+            flex: 1;
+            padding: 13px;
+            border: 0;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-edit-button {
+            background: white;
+            color: black;
+        }
+
+        .save-edit-button:hover {
+            background: #ddd;
+        }
+
+        .cancel-edit-button {
+            background: #333;
+            color: white;
+        }
+
+        .cancel-edit-button:hover {
+            background: #444;
+        }
+
         @media (max-width: 600px) {
 
             body {
@@ -214,7 +264,12 @@
                 align-items: flex-start;
             }
 
-            .delete-button {
+            .song-actions {
+                flex-direction: column;
+            }
+
+            .delete-button,
+            .edit-button {
                 padding: 8px 10px;
                 font-size: 12px;
             }
@@ -373,6 +428,131 @@
 
 
     <!-- =====================================
+         EDIT SONG
+    ====================================== -->
+
+    <div
+        class="card"
+        id="editCard"
+    >
+
+        <h2>
+            ✏️ Edit Song
+        </h2>
+
+        <div class="subtitle">
+            Change the song information.
+        </div>
+
+
+        <input
+            type="hidden"
+            id="editId"
+        >
+
+
+        <label>
+            Song Title
+        </label>
+
+        <input
+            type="text"
+            id="editTitle"
+            placeholder="Song title"
+            required
+        >
+
+
+        <label>
+            Artist
+        </label>
+
+        <input
+            type="text"
+            id="editArtist"
+            placeholder="Artist name"
+            required
+        >
+
+
+        <label>
+            Album
+        </label>
+
+        <input
+            type="text"
+            id="editAlbum"
+            placeholder="Album name"
+        >
+
+
+        <label>
+            Release Date
+        </label>
+
+        <input
+            type="date"
+            id="editReleaseDate"
+        >
+
+
+        <label>
+            Quality
+        </label>
+
+        <select id="editQuality">
+
+            <option value="Original">
+                Original
+            </option>
+
+            <option value="FLAC">
+                FLAC
+            </option>
+
+            <option value="WAV">
+                WAV
+            </option>
+
+            <option value="MP3">
+                MP3
+            </option>
+
+            <option value="AAC">
+                AAC
+            </option>
+
+        </select>
+
+
+        <div class="edit-buttons">
+
+            <button
+                type="button"
+                class="save-edit-button"
+                id="saveEditButton"
+            >
+                SAVE CHANGES
+            </button>
+
+            <button
+                type="button"
+                class="cancel-edit-button"
+                id="cancelEditButton"
+            >
+                CANCEL
+            </button>
+
+        </div>
+
+
+        <div id="editMessage"></div>
+
+    </div>
+
+
+
+    <!-- =====================================
          EXISTING SONGS
     ====================================== -->
 
@@ -381,6 +561,7 @@
         <h2>
             🎵 Existing Songs
         </h2>
+
 
         <button
             class="refresh-button"
@@ -416,14 +597,23 @@
    ADD SONG
 ========================================= */
 
+
 const form =
-    document.getElementById("songForm");
+    document.getElementById(
+        "songForm"
+    );
+
 
 const message =
-    document.getElementById("message");
+    document.getElementById(
+        "message"
+    );
+
 
 const submitButton =
-    document.getElementById("submitButton");
+    document.getElementById(
+        "submitButton"
+    );
 
 
 form.addEventListener(
@@ -458,8 +648,10 @@ form.addEventListener(
         submitButton.disabled =
             true;
 
+
         submitButton.textContent =
             "UPLOADING...";
+
 
         message.textContent =
             "Uploading song to Unbothered...";
@@ -546,7 +738,9 @@ form.addEventListener(
                 message.textContent =
                     "Song added successfully! 🎵";
 
+
                 form.reset();
+
 
                 loadSongs();
 
@@ -557,11 +751,13 @@ form.addEventListener(
                     result
                 );
 
+
                 message.textContent =
                     result.error ||
                     "Upload failed.";
 
             }
+
 
         } catch (error) {
 
@@ -569,6 +765,7 @@ form.addEventListener(
                 "Connection error:",
                 error
             );
+
 
             message.textContent =
                 "Could not connect to Unbothered server.";
@@ -578,6 +775,7 @@ form.addEventListener(
 
         submitButton.disabled =
             false;
+
 
         submitButton.textContent =
             "ADD SONG";
@@ -591,10 +789,12 @@ form.addEventListener(
    EXISTING SONGS
 ========================================= */
 
+
 const songList =
     document.getElementById(
         "songList"
     );
+
 
 const refreshButton =
     document.getElementById(
@@ -643,16 +843,19 @@ async function loadSongs() {
         }
 
 
-        songList.innerHTML = "";
+        songList.innerHTML =
+            "";
 
 
         songs.forEach(
             function(song) {
 
+
                 const item =
                     document.createElement(
                         "div"
                     );
+
 
                 item.className =
                     "song-item";
@@ -663,6 +866,7 @@ async function loadSongs() {
                         "div"
                     );
 
+
                 info.className =
                     "song-info";
 
@@ -672,8 +876,10 @@ async function loadSongs() {
                         "div"
                     );
 
+
                 title.className =
                     "song-title";
+
 
                 title.textContent =
                     song.title ||
@@ -685,8 +891,10 @@ async function loadSongs() {
                         "div"
                     );
 
+
                 artist.className =
                     "song-artist";
+
 
                 artist.textContent =
                     song.artist ||
@@ -697,9 +905,64 @@ async function loadSongs() {
                     title
                 );
 
+
                 info.appendChild(
                     artist
                 );
+
+
+
+                /* =========================
+                   ACTION BUTTONS
+                ========================= */
+
+
+                const actions =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                actions.className =
+                    "song-actions";
+
+
+
+                /* EDIT BUTTON */
+
+
+                const editButton =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                editButton.className =
+                    "edit-button";
+
+
+                editButton.type =
+                    "button";
+
+
+                editButton.textContent =
+                    "✏️ EDIT";
+
+
+                editButton.addEventListener(
+                    "click",
+                    function() {
+
+                        openEditForm(
+                            song
+                        );
+
+                    }
+                );
+
+
+
+                /* DELETE BUTTON */
 
 
                 const deleteButton =
@@ -707,11 +970,14 @@ async function loadSongs() {
                         "button"
                     );
 
+
                 deleteButton.className =
                     "delete-button";
 
+
                 deleteButton.type =
                     "button";
+
 
                 deleteButton.textContent =
                     "🗑️ DELETE";
@@ -731,18 +997,32 @@ async function loadSongs() {
                 );
 
 
+
+                actions.appendChild(
+                    editButton
+                );
+
+
+                actions.appendChild(
+                    deleteButton
+                );
+
+
+
                 item.appendChild(
                     info
                 );
 
+
                 item.appendChild(
-                    deleteButton
+                    actions
                 );
 
 
                 songList.appendChild(
                     item
                 );
+
 
             }
         );
@@ -766,14 +1046,287 @@ async function loadSongs() {
 
 
 /* =========================================
+   EDIT SONG
+========================================= */
+
+
+const editCard =
+    document.getElementById(
+        "editCard"
+    );
+
+
+const editId =
+    document.getElementById(
+        "editId"
+    );
+
+
+const editTitle =
+    document.getElementById(
+        "editTitle"
+    );
+
+
+const editArtist =
+    document.getElementById(
+        "editArtist"
+    );
+
+
+const editAlbum =
+    document.getElementById(
+        "editAlbum"
+    );
+
+
+const editReleaseDate =
+    document.getElementById(
+        "editReleaseDate"
+    );
+
+
+const editQuality =
+    document.getElementById(
+        "editQuality"
+    );
+
+
+const saveEditButton =
+    document.getElementById(
+        "saveEditButton"
+    );
+
+
+const cancelEditButton =
+    document.getElementById(
+        "cancelEditButton"
+    );
+
+
+const editMessage =
+    document.getElementById(
+        "editMessage"
+    );
+
+
+
+function openEditForm(song) {
+
+    editId.value =
+        song.id;
+
+
+    editTitle.value =
+        song.title ||
+        "";
+
+
+    editArtist.value =
+        song.artist ||
+        "";
+
+
+    editAlbum.value =
+        song.album ||
+        "";
+
+
+    editReleaseDate.value =
+        song.release_date ||
+        "";
+
+
+    editQuality.value =
+        song.quality ||
+        "Original";
+
+
+    editMessage.textContent =
+        "";
+
+
+    editCard.style.display =
+        "block";
+
+
+    editCard.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+
+cancelEditButton.addEventListener(
+    "click",
+    function() {
+
+        editCard.style.display =
+            "none";
+
+    }
+);
+
+
+
+saveEditButton.addEventListener(
+    "click",
+    async function() {
+
+
+        const id =
+            editId.value;
+
+
+        const title =
+            editTitle.value.trim();
+
+
+        const artist =
+            editArtist.value.trim();
+
+
+        const album =
+            editAlbum.value.trim();
+
+
+        const release_date =
+            editReleaseDate.value;
+
+
+        const quality =
+            editQuality.value;
+
+
+
+        if (!title || !artist) {
+
+            editMessage.textContent =
+                "Title and artist are required.";
+
+            return;
+
+        }
+
+
+        saveEditButton.disabled =
+            true;
+
+
+        saveEditButton.textContent =
+            "SAVING...";
+
+
+        editMessage.textContent =
+            "Updating song...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/songs/" +
+                    id,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            title:
+                                title,
+
+                            artist:
+                                artist,
+
+                            album:
+                                album,
+
+                            release_date:
+                                release_date,
+
+                            quality:
+                                quality
+                        })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.error ||
+                    "Update failed."
+                );
+
+            }
+
+
+            editMessage.textContent =
+                "Song updated successfully! 🎵";
+
+
+            setTimeout(
+                function() {
+
+                    editCard.style.display =
+                        "none";
+
+
+                    loadSongs();
+
+                },
+                700
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Edit error:",
+                error
+            );
+
+
+            editMessage.textContent =
+                "Could not update song: " +
+                error.message;
+
+        }
+
+
+        saveEditButton.disabled =
+            false;
+
+
+        saveEditButton.textContent =
+            "SAVE CHANGES";
+
+    }
+);
+
+
+
+/* =========================================
    DELETE SONG
 ========================================= */
+
 
 async function deleteSong(
     songId,
     songTitle,
     button
 ) {
+
 
     const confirmed =
         confirm(
@@ -792,6 +1345,7 @@ async function deleteSong(
 
     button.disabled =
         true;
+
 
     button.textContent =
         "DELETING...";
@@ -848,6 +1402,7 @@ async function deleteSong(
         button.disabled =
             false;
 
+
         button.textContent =
             "🗑️ DELETE";
 
@@ -861,6 +1416,7 @@ async function deleteSong(
    REFRESH BUTTON
 ========================================= */
 
+
 refreshButton.addEventListener(
     "click",
     loadSongs
@@ -871,6 +1427,7 @@ refreshButton.addEventListener(
 /* =========================================
    LOAD SONGS WHEN PAGE OPENS
 ========================================= */
+
 
 loadSongs();
 

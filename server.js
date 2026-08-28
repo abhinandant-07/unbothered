@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -53,7 +54,7 @@ app.get("/api/songs", async (req, res) => {
 
         const { data, error } = await supabase
             .from("songs")
-            .select("*")
+            .select("id,title,artist,audio_url,cover_url")
             .order("id", {
                 ascending: false
             });
@@ -124,30 +125,6 @@ app.post(
             const artist =
                 req.body.artist;
 
-            const album =
-                req.body.album;
-
-            const release_date =
-                req.body.release_date;
-
-            const quality =
-                req.body.quality;
-
-
-            console.log(
-                "TITLE:",
-                title
-            );
-
-            console.log(
-                "ARTIST:",
-                artist
-            );
-
-
-            /* ---------------------------------
-               CHECK TITLE & ARTIST
-            --------------------------------- */
 
             if (!title || !artist) {
 
@@ -158,10 +135,6 @@ app.post(
 
             }
 
-
-            /* ---------------------------------
-               CHECK AUDIO FILE
-            --------------------------------- */
 
             if (
                 !req.files ||
@@ -180,9 +153,13 @@ app.post(
             const audioFile =
                 req.files.audio[0];
 
+            const coverFile =
+                req.files.cover &&
+                req.files.cover[0];
+
 
             /* =================================
-               AUDIO UPLOAD
+               AUDIO FILE NAME
             ================================= */
 
             const audioFileName =
@@ -198,8 +175,12 @@ app.post(
             );
 
 
+            /* =================================
+               UPLOAD AUDIO
+            ================================= */
+
             const {
-                error: audioError
+                error: audioUploadError
             } = await supabase.storage
                 .from("audio1")
                 .upload(
@@ -208,31 +189,25 @@ app.post(
                     {
                         contentType:
                             audioFile.mimetype,
-
                         upsert: false
                     }
                 );
 
 
-            if (audioError) {
+            if (audioUploadError) {
 
                 console.error(
                     "AUDIO UPLOAD ERROR:",
-                    audioError
+                    audioUploadError
                 );
 
-                return res.status(400).json({
+                return res.status(500).json({
                     error:
-                        "Audio upload failed: " +
-                        audioError.message
+                        audioUploadError.message
                 });
 
             }
 
-
-            /* ---------------------------------
-               AUDIO PUBLIC URL
-            --------------------------------- */
 
             const {
                 data: audioPublicData
@@ -247,12 +222,6 @@ app.post(
                 audioPublicData.publicUrl;
 
 
-            console.log(
-                "AUDIO URL:",
-                audioUrl
-            );
-
-
             /* =================================
                COVER IMAGE
             ================================= */
@@ -260,14 +229,7 @@ app.post(
             let coverUrl = null;
 
 
-            if (
-                req.files.cover &&
-                req.files.cover[0]
-            ) {
-
-                const coverFile =
-                    req.files.cover[0];
-
+            if (coverFile) {
 
                 const coverFileName =
                     Date.now() +
@@ -276,14 +238,8 @@ app.post(
                         .replace(/\s+/g, "-");
 
 
-                console.log(
-                    "Uploading cover:",
-                    coverFileName
-                );
-
-
                 const {
-                    error: coverError
+                    error: coverUploadError
                 } = await supabase.storage
                     .from("audio1")
                     .upload(
@@ -292,23 +248,21 @@ app.post(
                         {
                             contentType:
                                 coverFile.mimetype,
-
                             upsert: false
                         }
                     );
 
 
-                if (coverError) {
+                if (coverUploadError) {
 
                     console.error(
                         "COVER UPLOAD ERROR:",
-                        coverError
+                        coverUploadError
                     );
 
-                    return res.status(400).json({
+                    return res.status(500).json({
                         error:
-                            "Cover upload failed: " +
-                            coverError.message
+                            coverUploadError.message
                     });
 
                 }
@@ -330,79 +284,56 @@ app.post(
 
 
             /* =================================
-               INSERT SONG INTO DATABASE
+               INSERT SONG
             ================================= */
-
-            console.log(
-                "Inserting song into Supabase..."
-            );
-
 
             const {
                 data,
-                error: insertError
+                error
             } = await supabase
                 .from("songs")
-                .insert([
-                    {
-                        title: title,
-
-                        artist: artist,
-
-                        album: album || null,
-
-                        release_date:
-                            release_date || null,
-
-                        quality:
-                            quality || "Original",
-
-                        audio_url:
-                            audioUrl,
-
-                        cover_url:
-                            coverUrl
-                    }
-                ])
-                .select()
-                .single();
-
-
-            if (insertError) {
-
-                console.error(
-                    "DATABASE INSERT ERROR:",
-                    insertError
+                .insert({
+                    title: title,
+                    artist: artist,
+                    audio_url: audioUrl,
+                    cover_url: coverUrl
+                })
+                .select(
+                    "id,title,artist,audio_url,cover_url"
                 );
 
-                return res.status(400).json({
-                    error:
-                        "Database insert failed: " +
-                        insertError.message
+
+            if (error) {
+
+                console.error(
+                    "INSERT SONG ERROR:",
+                    error
+                );
+
+                return res.status(500).json({
+                    error: error.message
                 });
 
             }
 
 
+            const newSong =
+                data && data.length > 0
+                    ? data[0]
+                    : null;
+
+
             console.log(
                 "SONG ADDED:",
-                data
+                newSong
             );
 
 
-            /* =================================
-               SUCCESS
-            ================================= */
-
-            res.json({
-
+            res.status(201).json({
                 success: true,
-
                 message:
-                    "Song added successfully!",
-
-                song: data
-
+                    "Song added successfully.",
+                song: newSong
             });
 
 
@@ -413,9 +344,136 @@ app.post(
                 error
             );
 
+            res.status(500).json({
+                error: error.message
+            });
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   EDIT SONG
+========================================= */
+
+app.put(
+    "/api/songs/:id",
+
+    async (req, res) => {
+
+        try {
+
+            const songId =
+                req.params.id;
+
+            const title =
+                req.body.title;
+
+            const artist =
+                req.body.artist;
+
+
+            console.log(
+                "EDIT SONG REQUEST:",
+                songId
+            );
+
+            console.log(
+                "NEW TITLE:",
+                title
+            );
+
+            console.log(
+                "NEW ARTIST:",
+                artist
+            );
+
+
+            if (!title || !artist) {
+
+                return res.status(400).json({
+                    error:
+                        "Title and artist are required."
+                });
+
+            }
+
+
+            /* =================================
+               UPDATE ONLY REAL COLUMNS
+            ================================= */
+
+            const {
+                data,
+                error
+            } = await supabase
+                .from("songs")
+                .update({
+                    title: title,
+                    artist: artist
+                })
+                .eq("id", songId)
+                .select(
+                    "id,title,artist,audio_url,cover_url"
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "EDIT SONG DATABASE ERROR:",
+                    error
+                );
+
+                return res.status(500).json({
+                    error:
+                        "Could not update song: " +
+                        error.message
+                });
+
+            }
+
+
+            if (!data || data.length === 0) {
+
+                return res.status(404).json({
+                    error:
+                        "Song not found or could not be updated."
+                });
+
+            }
+
+
+            const updatedSong =
+                data[0];
+
+
+            console.log(
+                "SONG UPDATED:",
+                updatedSong
+            );
+
+
+            res.json({
+                success: true,
+                message:
+                    "Song updated successfully.",
+                song: updatedSong
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "EDIT SONG SERVER ERROR:",
+                error
+            );
 
             res.status(500).json({
                 error:
+                    "Could not update song: " +
                     error.message
             });
 
@@ -446,26 +504,41 @@ app.delete(
             );
 
 
-            /* ---------------------------------
-               GET SONG FIRST
-            --------------------------------- */
+            /* =================================
+               FIND SONG
+            ================================= */
 
             const {
-                data: song,
-                error: fetchError
+                data: songData,
+                error: findError
             } = await supabase
                 .from("songs")
-                .select("*")
+                .select(
+                    "id,title,artist,audio_url,cover_url"
+                )
                 .eq("id", songId)
-                .single();
+                .limit(1);
 
 
-            if (fetchError || !song) {
+            if (findError) {
 
                 console.error(
-                    "FETCH SONG ERROR:",
-                    fetchError
+                    "FIND SONG ERROR:",
+                    findError
                 );
+
+                return res.status(500).json({
+                    error:
+                        findError.message
+                });
+
+            }
+
+
+            if (
+                !songData ||
+                songData.length === 0
+            ) {
 
                 return res.status(404).json({
                     error:
@@ -490,13 +563,12 @@ app.delete(
             if (deleteError) {
 
                 console.error(
-                    "DELETE DATABASE ERROR:",
+                    "DELETE SONG DATABASE ERROR:",
                     deleteError
                 );
 
-                return res.status(400).json({
+                return res.status(500).json({
                     error:
-                        "Could not delete song: " +
                         deleteError.message
                 });
 
@@ -505,23 +577,14 @@ app.delete(
 
             console.log(
                 "SONG DELETED:",
-                song.title
+                songData[0]
             );
 
 
-            /* =================================
-               SUCCESS
-            ================================= */
-
             res.json({
-
                 success: true,
-
                 message:
-                    "Song deleted successfully.",
-
-                song: song
-
+                    "Song deleted successfully."
             });
 
 
@@ -531,7 +594,6 @@ app.delete(
                 "DELETE SONG SERVER ERROR:",
                 error
             );
-
 
             res.status(500).json({
                 error:
@@ -550,7 +612,6 @@ app.delete(
 
 app.listen(
     PORT,
-    "0.0.0.0",
     () => {
 
         console.log(
